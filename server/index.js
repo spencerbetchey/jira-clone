@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const dotenv = require('dotenv')
+const pool = require('./config/db')
 
 dotenv.config()
 
@@ -16,7 +17,10 @@ app.get('/', (req, res) => {
   res.json({ message: 'ProjectFlow API is running!' })
 })
 
-//Start server
+//Start server and test DB connection
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
+  pool.query('SELECT 1')
+    .then(() => console.log('MySQL connected successfully!'))
+    .catch((err) => console.error('MySQL connection failed:', err.message))
 })
