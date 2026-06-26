@@ -1,9 +1,9 @@
---ProjectFlow Database Schema
+-- ProjectFlow Database Schema
 
 CREATE DATABASE IF NOT EXISTS projectflow;
 USE projectflow;
 
---Users table
+-- Users table
 CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
---Projects table
+-- Projects table
 CREATE TABLE IF NOT EXISTS projects (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(150) NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS projects (
   FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
---Project members table
+-- Project members table
 CREATE TABLE IF NOT EXISTS project_members (
   id INT AUTO_INCREMENT PRIMARY KEY,
   project_id INT NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS project_members (
   UNIQUE KEY unique_member (project_id, user_id)
 );
 
---Sprints table
+-- Sprints table
 CREATE TABLE IF NOT EXISTS sprints (
   id INT AUTO_INCREMENT PRIMARY KEY,
   project_id INT NOT NULL,
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS sprints (
   FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
 );
 
---Tickets table
+-- Tickets table
 CREATE TABLE IF NOT EXISTS tickets (
   id INT AUTO_INCREMENT PRIMARY KEY,
   title VARCHAR(255) NOT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS tickets (
   FOREIGN KEY (assignee_id) REFERENCES users(id) ON DELETE SET NULL
 );
 
---Comments table
+-- Comments table
 CREATE TABLE IF NOT EXISTS comments (
   id INT AUTO_INCREMENT PRIMARY KEY,
   ticket_id INT NOT NULL,
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS comments (
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
---Ticket history table
+-- Ticket history table
 CREATE TABLE IF NOT EXISTS ticket_history (
   id INT AUTO_INCREMENT PRIMARY KEY,
   ticket_id INT NOT NULL,
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS ticket_history (
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
---Notifications table
+-- Notifications table
 CREATE TABLE IF NOT EXISTS notifications (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
