@@ -98,4 +98,22 @@ const login = async (req, res) => {
   }
 }
 
-module.exports = { register, login }
+const getMe = async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      'SELECT id, name, email, role FROM users WHERE id = ?',
+      [req.userId]
+    )
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+
+    res.json({ user: rows[0] })
+  } catch (error) {
+    console.error('GetMe error:', error)
+    res.status(500).json({ message: 'Server error' })
+  }
+}
+
+module.exports = { register, login, getMe }
