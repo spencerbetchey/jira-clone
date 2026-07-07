@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { fetchProjects, createProject, deleteProject } from '../../api/projects'
 
 function Projects() {
@@ -84,7 +85,7 @@ function Projects() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {projects.map(project => (
-            <div key={project.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+            <div key={project.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between">
                 <h2 className="font-semibold text-gray-800">{project.name}</h2>
                 <button
@@ -101,9 +102,12 @@ function Projects() {
                 <span className="text-xs text-gray-400">
                   {new Date(project.created_at).toLocaleDateString()}
                 </span>
-                <span className="text-xs text-gray-400">
-                  Owner: {project.owner_name}
-                </span>
+                <Link
+                  to={`/projects/${project.id}`}
+                  className="text-blue-600 text-sm font-medium hover:underline"
+                >
+                  View →
+                </Link>
               </div>
             </div>
           ))}

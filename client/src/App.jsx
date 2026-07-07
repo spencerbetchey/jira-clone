@@ -6,6 +6,7 @@ import Login from './pages/Auth/Login'
 import Register from './pages/Auth/Register'
 import Dashboard from './pages/Dashboard/Dashboard'
 import Projects from './pages/Projects/Projects'
+import ProjectDetail from './pages/Projects/ProjectDetail'
 import Tickets from './pages/Tickets/Tickets'
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
       {/* Protected routes */}
       <Route path="/dashboard" element={<ProtectedRoute><Layout><Dashboard /></Layout></ProtectedRoute>} />
       <Route path="/projects" element={<ProtectedRoute><Layout><Projects /></Layout></ProtectedRoute>} />
+      <Route path="/projects/:id" element={<ProtectedRoute><Layout><ProjectDetail /></Layout></ProtectedRoute>} />
       <Route path="/tickets" element={<ProtectedRoute><Layout><Tickets /></Layout></ProtectedRoute>} />
     </Routes>
   )
