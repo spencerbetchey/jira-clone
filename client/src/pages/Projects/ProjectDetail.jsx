@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { fetchProject, deleteProject } from '../../api/projects'
+import { fetchProject, deleteProject, updateProject } from '../../api/projects'
 import { fetchTickets, createTicket } from '../../api/tickets'
 
 function ProjectDetail() {
@@ -10,13 +10,19 @@ function ProjectDetail() {
   const [tickets, setTickets] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [showModal, setShowModal] = useState(false)
+  const [showTicketModal, setShowTicketModal] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
   const [creating, setCreating] = useState(false)
+  const [saving, setSaving] = useState(false)
   const [newTicket, setNewTicket] = useState({
     title: '',
     description: '',
     priority: 'medium',
     type: 'task'
+  })
+  const [editProject, setEditProject] = useState({
+    name: '',
+    description: ''
   })
 
   useEffect(() => {
@@ -48,6 +54,25 @@ function ProjectDetail() {
     }
   }
 
+  const handleEditOpen = () => {
+    setEditProject({ name: project.name, description: project.description || '' })
+    setShowEditModal(true)
+  }
+
+  const handleEditSave = async () => {
+    if (!editProject.name.trim()) return
+    setSaving(true)
+    try {
+      await updateProject(id, editProject)
+      setProject({ ...project, ...editProject })
+      setShowEditModal(false)
+    } catch (err) {
+      setError('Failed to update project')
+    } finally {
+      setSaving(false)
+    }
+  }
+
   const handleCreateTicket = async () => {
     if (!newTicket.title.trim()) return
     setCreating(true)
@@ -55,7 +80,7 @@ function ProjectDetail() {
       const created = await createTicket(id, newTicket)
       setTickets([created, ...tickets])
       setNewTicket({ title: '', description: '', priority: 'medium', type: 'task' })
-      setShowModal(false)
+      setShowTicketModal(false)
     } catch (err) {
       setError('Failed to create ticket')
     } finally {
@@ -90,7 +115,6 @@ function ProjectDetail() {
 
   return (
     <div>
-      {/* Back button */}
       <Link
         to="/projects"
         className="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1 mb-6"
@@ -111,12 +135,20 @@ function ProjectDetail() {
               </span>
             </div>
           </div>
-          <button
-            onClick={handleDelete}
-            className="text-sm text-red-500 hover:text-red-700 border border-red-200 px-3 py-1.5 rounded-md hover:bg-red-50 transition-colors"
-          >
-            Delete Project
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={handleEditOpen}
+              className="text-sm text-blue-500 hover:text-blue-700 border border-blue-200 px-3 py-1.5 rounded-md hover:bg-blue-50 transition-colors"
+            >
+              Edit Project
+            </button>
+            <button
+              onClick={handleDelete}
+              className="text-sm text-red-500 hover:text-red-700 border border-red-200 px-3 py-1.5 rounded-md hover:bg-red-50 transition-colors"
+            >
+              Delete Project
+            </button>
+          </div>
         </div>
       </div>
 
@@ -127,7 +159,7 @@ function ProjectDetail() {
             Tickets <span className="text-gray-400 font-normal text-sm">({tickets.length})</span>
           </h2>
           <button
-            onClick={() => setShowModal(true)}
+            onClick={() => setShowTicketModal(true)}
             className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
           >
             + New Ticket
@@ -162,12 +194,56 @@ function ProjectDetail() {
         )}
       </div>
 
+      {/* Edit Project Modal */}
+      {showEditModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">Edit Project</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Project Name</label>
+                <input
+                  type="text"
+                  value={editProject.name}
+                  onChange={(e) => setEditProject({ ...editProject, name: e.target.value })}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  autoFocus
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea
+                  value={editProject.description}
+                  onChange={(e) => setEditProject({ ...editProject, description: e.target.value })}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  rows={3}
+                />
+              </div>
+            </div>
+            <div className="flex gap-3 mt-6 justify-end">
+              <button
+                onClick={() => setShowEditModal(false)}
+                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleEditSave}
+                disabled={saving}
+                className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors"
+              >
+                {saving ? 'Saving...' : 'Save Changes'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Create Ticket Modal */}
-      {showModal && (
+      {showTicketModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">Create New Ticket</h2>
-
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
@@ -180,7 +256,6 @@ function ProjectDetail() {
                   autoFocus
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                 <textarea
@@ -191,7 +266,6 @@ function ProjectDetail() {
                   rows={3}
                 />
               </div>
-
               <div className="flex gap-4">
                 <div className="flex-1">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
@@ -207,7 +281,6 @@ function ProjectDetail() {
                     <option value="highest">Highest</option>
                   </select>
                 </div>
-
                 <div className="flex-1">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
                   <select
@@ -223,10 +296,9 @@ function ProjectDetail() {
                 </div>
               </div>
             </div>
-
             <div className="flex gap-3 mt-6 justify-end">
               <button
-                onClick={() => setShowModal(false)}
+                onClick={() => setShowTicketModal(false)}
                 className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
               >
                 Cancel
