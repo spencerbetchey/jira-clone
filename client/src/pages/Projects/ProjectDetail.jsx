@@ -174,7 +174,7 @@ function ProjectDetail() {
         ) : (
           <div className="divide-y divide-gray-100">
             {tickets.map(ticket => (
-              <div key={ticket.id} className="py-3 flex items-center justify-between hover:bg-gray-50 px-2 rounded-md transition-colors">
+              <Link key={ticket.id} to={`/projects/${id}/tickets/${ticket.id}`} className="py-3 flex items-center justify-between hover:bg-gray-50 px-2 rounded-md transition-colors">
                 <div className="flex items-center gap-3">
                   <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${getTypeColor(ticket.type)}`}>
                     {ticket.type}
@@ -188,7 +188,7 @@ function ProjectDetail() {
                   <span className="text-xs text-gray-400 capitalize">{ticket.status.replace('_', ' ')}</span>
                   <span className="text-xs text-gray-400">{ticket.reporter_name}</span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
