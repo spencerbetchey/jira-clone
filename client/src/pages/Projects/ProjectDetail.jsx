@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { fetchProject, deleteProject, updateProject } from '../../api/projects'
-import { fetchTickets, createTicket } from '../../api/tickets'
+import { fetchTickets, createTicket, updateTicket } from '../../api/tickets'
+import KanbanBoard from '../../components/tickets/KanbanBoard'
 
 function ProjectDetail() {
   const { id } = useParams()
@@ -14,6 +15,7 @@ function ProjectDetail() {
   const [showEditModal, setShowEditModal] = useState(false)
   const [creating, setCreating] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [view, setView] = useState('kanban')
   const [newTicket, setNewTicket] = useState({
     title: '',
     description: '',
@@ -88,6 +90,18 @@ function ProjectDetail() {
     }
   }
 
+  const handleTicketMove = async (ticketId, newStatus) => {
+    setTickets(tickets.map(t =>
+      t.id === ticketId ? { ...t, status: newStatus } : t
+    ))
+    try {
+      await updateTicket(id, ticketId, { status: newStatus })
+    } catch (err) {
+      setError('Failed to update ticket status')
+      loadData()
+    }
+  }
+
   const getPriorityColor = (priority) => {
     const colors = {
       lowest: 'bg-gray-100 text-gray-600',
@@ -154,10 +168,27 @@ function ProjectDetail() {
 
       {/* Tickets Section */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-800">
-            Tickets <span className="text-gray-400 font-normal text-sm">({tickets.length})</span>
-          </h2>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-4">
+            <h2 className="text-lg font-semibold text-gray-800">
+              Tickets <span className="text-gray-400 font-normal text-sm">({tickets.length})</span>
+            </h2>
+            {/* View Toggle */}
+            <div className="flex bg-gray-100 rounded-md p-1">
+              <button
+                onClick={() => setView('kanban')}
+                className={`px-3 py-1 rounded text-xs font-medium transition-colors ${view === 'kanban' ? 'bg-white shadow-sm text-gray-800' : 'text-gray-500 hover:text-gray-700'}`}
+              >
+                Kanban
+              </button>
+              <button
+                onClick={() => setView('list')}
+                className={`px-3 py-1 rounded text-xs font-medium transition-colors ${view === 'list' ? 'bg-white shadow-sm text-gray-800' : 'text-gray-500 hover:text-gray-700'}`}
+              >
+                List
+              </button>
+            </div>
+          </div>
           <button
             onClick={() => setShowTicketModal(true)}
             className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
@@ -171,10 +202,20 @@ function ProjectDetail() {
             <p>No tickets yet</p>
             <p className="text-sm mt-1">Create your first ticket to get started</p>
           </div>
+        ) : view === 'kanban' ? (
+          <KanbanBoard
+            tickets={tickets}
+            onTicketMove={handleTicketMove}
+            projectId={id}
+          />
         ) : (
           <div className="divide-y divide-gray-100">
             {tickets.map(ticket => (
-              <Link key={ticket.id} to={`/projects/${id}/tickets/${ticket.id}`} className="py-3 flex items-center justify-between hover:bg-gray-50 px-2 rounded-md transition-colors">
+              <Link
+                key={ticket.id}
+                to={`/projects/${id}/tickets/${ticket.id}`}
+                className="py-3 flex items-center justify-between hover:bg-gray-50 px-2 rounded-md transition-colors"
+              >
                 <div className="flex items-center gap-3">
                   <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${getTypeColor(ticket.type)}`}>
                     {ticket.type}
