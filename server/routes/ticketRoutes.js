@@ -5,7 +5,8 @@ const {
   getTicket,
   createTicket,
   updateTicket,
-  deleteTicket
+  deleteTicket,
+  getAllTickets
 } = require('../controllers/ticketsController')
 const authMiddleware = require('../middleware/authMiddleware')
 

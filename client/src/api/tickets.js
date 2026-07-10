@@ -41,3 +41,10 @@ export const deleteTicket = async (projectId, ticketId) => {
   })
   return res.data
 }
+
+export const fetchAllTickets = async () => {
+  const res = await axios.get('http://localhost:5000/api/tickets', {
+    headers: getAuthHeader()
+  })
+  return res.data.tickets
+}

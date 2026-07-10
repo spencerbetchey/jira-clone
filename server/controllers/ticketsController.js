@@ -163,4 +163,29 @@ const deleteTicket = async (req, res) => {
   }
 }
 
-module.exports = { getTickets, getTicket, createTicket, updateTicket, deleteTicket }
+//Get all tickets across all projects for the logged in user
+const getAllTickets = async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      `SELECT t.*, 
+        p.name as project_name,
+        u1.name as reporter_name,
+        u2.name as assignee_name
+       FROM tickets t
+       JOIN projects p ON t.project_id = p.id
+       JOIN users u1 ON t.reporter_id = u1.id
+       LEFT JOIN users u2 ON t.assignee_id = u2.id
+       WHERE p.owner_id = ?
+       OR p.id IN (SELECT project_id FROM project_members WHERE user_id = ?)
+       ORDER BY t.created_at DESC`,
+      [req.userId, req.userId]
+    )
+
+    res.json({ tickets: rows })
+  } catch (error) {
+    console.error('GetAllTickets error:', error)
+    res.status(500).json({ message: 'Server error' })
+  }
+}
+
+module.exports = { getTickets, getTicket, createTicket, updateTicket, deleteTicket, getAllTickets }
