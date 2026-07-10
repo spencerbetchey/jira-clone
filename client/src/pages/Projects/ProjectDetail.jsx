@@ -16,6 +16,11 @@ function ProjectDetail() {
   const [creating, setCreating] = useState(false)
   const [saving, setSaving] = useState(false)
   const [view, setView] = useState('kanban')
+  const [filters, setFilters] = useState({
+    priority: 'all',
+    type: 'all',
+    assignee: 'all'
+  })
   const [newTicket, setNewTicket] = useState({
     title: '',
     description: '',
@@ -127,6 +132,18 @@ function ProjectDetail() {
   if (error) return <div className="text-red-500">{error}</div>
   if (!project) return null
 
+  const getFilteredTickets = () => {
+    return tickets.filter(ticket => {
+      if (filters.priority !== 'all' && ticket.priority !== filters.priority) return false
+      if (filters.type !== 'all' && ticket.type !== filters.type) return false
+      if (filters.assignee !== 'all') {
+        if (filters.assignee === 'unassigned' && ticket.assignee_id) return false
+        if (filters.assignee === 'assigned' && !ticket.assignee_id) return false
+      }
+      return true
+    })
+  }
+
   return (
     <div>
       <Link
@@ -168,33 +185,84 @@ function ProjectDetail() {
 
       {/* Tickets Section */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <h2 className="text-lg font-semibold text-gray-800">
-              Tickets <span className="text-gray-400 font-normal text-sm">({tickets.length})</span>
-            </h2>
-            {/* View Toggle */}
-            <div className="flex bg-gray-100 rounded-md p-1">
-              <button
-                onClick={() => setView('kanban')}
-                className={`px-3 py-1 rounded text-xs font-medium transition-colors ${view === 'kanban' ? 'bg-white shadow-sm text-gray-800' : 'text-gray-500 hover:text-gray-700'}`}
-              >
-                Kanban
-              </button>
-              <button
-                onClick={() => setView('list')}
-                className={`px-3 py-1 rounded text-xs font-medium transition-colors ${view === 'list' ? 'bg-white shadow-sm text-gray-800' : 'text-gray-500 hover:text-gray-700'}`}
-              >
-                List
-              </button>
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-4">
+              <h2 className="text-lg font-semibold text-gray-800">
+                Tickets <span className="text-gray-400 font-normal text-sm">({tickets.length})</span>
+              </h2>
+              {/* View Toggle */}
+              <div className="flex bg-gray-100 rounded-md p-1">
+                <button
+                  onClick={() => setView('kanban')}
+                  className={`px-3 py-1 rounded text-xs font-medium transition-colors ${view === 'kanban' ? 'bg-white shadow-sm text-gray-800' : 'text-gray-500 hover:text-gray-700'}`}
+                >
+                  Kanban
+                </button>
+                <button
+                  onClick={() => setView('list')}
+                  className={`px-3 py-1 rounded text-xs font-medium transition-colors ${view === 'list' ? 'bg-white shadow-sm text-gray-800' : 'text-gray-500 hover:text-gray-700'}`}
+                >
+                  List
+                </button>
+              </div>
             </div>
+            <button
+              onClick={() => setShowTicketModal(true)}
+              className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
+            >
+              + New Ticket
+            </button>
           </div>
-          <button
-            onClick={() => setShowTicketModal(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
-          >
-            + New Ticket
-          </button>
+
+          {/* Filters */}
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-gray-500 font-medium">Filter:</span>
+
+            <select
+              value={filters.priority}
+              onChange={(e) => setFilters({ ...filters, priority: e.target.value })}
+              className="border border-gray-200 rounded-md px-2 py-1 text-xs text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="all">All Priorities</option>
+              <option value="lowest">Lowest</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+              <option value="highest">Highest</option>
+            </select>
+
+            <select
+              value={filters.type}
+              onChange={(e) => setFilters({ ...filters, type: e.target.value })}
+              className="border border-gray-200 rounded-md px-2 py-1 text-xs text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="all">All Types</option>
+              <option value="task">Task</option>
+              <option value="bug">Bug</option>
+              <option value="feature">Feature</option>
+              <option value="improvement">Improvement</option>
+            </select>
+
+            <select
+              value={filters.assignee}
+              onChange={(e) => setFilters({ ...filters, assignee: e.target.value })}
+              className="border border-gray-200 rounded-md px-2 py-1 text-xs text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="all">All Assignees</option>
+              <option value="assigned">Assigned</option>
+              <option value="unassigned">Unassigned</option>
+            </select>
+
+            {(filters.priority !== 'all' || filters.type !== 'all' || filters.assignee !== 'all') && (
+              <button
+                onClick={() => setFilters({ priority: 'all', type: 'all', assignee: 'all' })}
+                className="text-xs text-blue-600 hover:underline"
+              >
+                Clear filters
+              </button>
+            )}
+          </div>
         </div>
 
         {tickets.length === 0 ? (
@@ -204,13 +272,13 @@ function ProjectDetail() {
           </div>
         ) : view === 'kanban' ? (
           <KanbanBoard
-            tickets={tickets}
+            tickets={getFilteredTickets()}
             onTicketMove={handleTicketMove}
             projectId={id}
           />
         ) : (
           <div className="divide-y divide-gray-100">
-            {tickets.map(ticket => (
+            {getFilteredTickets().map(ticket => (
               <Link
                 key={ticket.id}
                 to={`/projects/${id}/tickets/${ticket.id}`}
