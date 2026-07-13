@@ -3,6 +3,8 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import { fetchProject, deleteProject, updateProject } from '../../api/projects'
 import { fetchTickets, createTicket, updateTicket } from '../../api/tickets'
 import KanbanBoard from '../../components/tickets/KanbanBoard'
+import { fetchSprints } from '../../api/sprints'
+import SprintPanel from '../../components/tickets/SprintPanel'
 
 function ProjectDetail() {
   const { id } = useParams()
@@ -16,6 +18,7 @@ function ProjectDetail() {
   const [creating, setCreating] = useState(false)
   const [saving, setSaving] = useState(false)
   const [view, setView] = useState('kanban')
+  const [sprints, setSprints] = useState([])
   const [filters, setFilters] = useState({
     priority: 'all',
     type: 'all',
@@ -38,12 +41,14 @@ function ProjectDetail() {
 
   const loadData = async () => {
     try {
-      const [projectData, ticketsData] = await Promise.all([
+      const [projectData, ticketsData, sprintsData] = await Promise.all([
         fetchProject(id),
-        fetchTickets(id)
+        fetchTickets(id),
+        fetchSprints(id)
       ])
       setProject(projectData)
       setTickets(ticketsData)
+      setSprints(sprintsData)
     } catch (err) {
       setError('Failed to load project')
     } finally {
@@ -182,6 +187,15 @@ function ProjectDetail() {
           </div>
         </div>
       </div>
+
+      {/* Sprint Panel */}
+      <SprintPanel
+        sprints={sprints}
+        setSprints={setSprints}
+        tickets={tickets}
+        setTickets={setTickets}
+        projectId={id}
+      />
 
       {/* Tickets Section */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">

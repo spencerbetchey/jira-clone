@@ -5,6 +5,7 @@ const pool = require('./config/db')
 const authRoutes = require('./routes/authRoutes')
 const projectRoutes = require('./routes/projectRoutes')
 const ticketRoutes = require('./routes/ticketRoutes')
+const sprintRoutes = require('./routes/sprintRoutes')
 
 dotenv.config()
 
@@ -19,6 +20,7 @@ app.use(express.json())
 app.use('/api/auth', authRoutes)
 app.use('/api/projects', projectRoutes)
 app.use('/api/projects/:projectId/tickets', ticketRoutes)
+app.use('/api/projects/:projectId/sprints', sprintRoutes)
 app.use('/api/tickets', require('./routes/globalTicketRoutes'))
 
 //Test route
