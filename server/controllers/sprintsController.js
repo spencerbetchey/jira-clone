@@ -40,7 +40,11 @@ const createSprint = async (req, res) => {
     )
 
     const [newSprint] = await pool.query(
-      'SELECT * FROM sprints WHERE id = ?',
+      `SELECT s.*, COUNT(t.id) as ticket_count 
+      FROM sprints s
+      LEFT JOIN tickets t ON t.sprint_id = s.id
+      WHERE s.id = ?
+      GROUP BY s.id`,
       [result.insertId]
     )
 
