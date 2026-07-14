@@ -31,3 +31,24 @@ export const deleteProject = async (id) => {
   const res = await axios.delete(`${API_URL}/${id}`, { headers: getAuthHeader() })
   return res.data
 }
+
+export const fetchProjectMembers = async (projectId) => {
+  const res = await axios.get(`${API_URL}/${projectId}/members`, {
+    headers: getAuthHeader()
+  })
+  return res.data.members
+}
+
+export const addProjectMember = async (projectId, email, role) => {
+  const res = await axios.post(`${API_URL}/${projectId}/members`, { email, role }, {
+    headers: getAuthHeader()
+  })
+  return res.data
+}
+
+export const removeProjectMember = async (projectId, userId) => {
+  const res = await axios.delete(`${API_URL}/${projectId}/members/${userId}`, {
+    headers: getAuthHeader()
+  })
+  return res.data
+}

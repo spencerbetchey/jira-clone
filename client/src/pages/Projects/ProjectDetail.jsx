@@ -5,6 +5,7 @@ import { fetchTickets, createTicket, updateTicket } from '../../api/tickets'
 import KanbanBoard from '../../components/tickets/KanbanBoard'
 import { fetchSprints } from '../../api/sprints'
 import SprintPanel from '../../components/tickets/SprintPanel'
+import MembersPanel from '../../components/layout/MembersPanel'
 
 function ProjectDetail() {
   const { id } = useParams()
@@ -187,6 +188,12 @@ function ProjectDetail() {
           </div>
         </div>
       </div>
+
+      {/* Members Panel */}
+      <MembersPanel
+        projectId={id}
+        ownerId={project.owner_id}
+      />
 
       {/* Sprint Panel */}
       <SprintPanel
