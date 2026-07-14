@@ -5,11 +5,13 @@ const {
   getProject,
   createProject,
   updateProject,
-  deleteProject
+  deleteProject,
+  getProjectMembers,
+  addProjectMember,
+  removeProjectMember
 } = require('../controllers/projectsController')
 const authMiddleware = require('../middleware/authMiddleware')
 
-//All project routes require authentication
 router.use(authMiddleware)
 
 router.get('/', getProjects)
@@ -17,5 +19,10 @@ router.get('/:id', getProject)
 router.post('/', createProject)
 router.put('/:id', updateProject)
 router.delete('/:id', deleteProject)
+
+// Member routes
+router.get('/:id/members', getProjectMembers)
+router.post('/:id/members', addProjectMember)
+router.delete('/:id/members/:userId', removeProjectMember)
 
 module.exports = router
