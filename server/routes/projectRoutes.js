@@ -11,18 +11,20 @@ const {
   removeProjectMember
 } = require('../controllers/projectsController')
 const authMiddleware = require('../middleware/authMiddleware')
+const { requireProjectRole } = require('../middleware/roleMiddleware')
 
 router.use(authMiddleware)
 
+//Project CRUD
 router.get('/', getProjects)
 router.get('/:id', getProject)
 router.post('/', createProject)
-router.put('/:id', updateProject)
-router.delete('/:id', deleteProject)
+router.put('/:id', requireProjectRole('admin'), updateProject)
+router.delete('/:id', requireProjectRole('admin'), deleteProject)
 
-// Member routes
+//Member routes
 router.get('/:id/members', getProjectMembers)
-router.post('/:id/members', addProjectMember)
-router.delete('/:id/members/:userId', removeProjectMember)
+router.post('/:id/members', requireProjectRole('admin'), addProjectMember)
+router.delete('/:id/members/:userId', requireProjectRole('admin'), removeProjectMember)
 
 module.exports = router

@@ -9,13 +9,17 @@ const {
   getAllTickets
 } = require('../controllers/ticketsController')
 const authMiddleware = require('../middleware/authMiddleware')
+const { requireProjectRole } = require('../middleware/roleMiddleware')
 
 router.use(authMiddleware)
 
+//Anyone can view tickets
 router.get('/', getTickets)
-router.post('/', createTicket)
 router.get('/:id', getTicket)
-router.put('/:id', updateTicket)
-router.delete('/:id', deleteTicket)
+
+//Only admins and developers can create/edit/delete tickets
+router.post('/', requireProjectRole('admin', 'developer'), createTicket)
+router.put('/:id', requireProjectRole('admin', 'developer'), updateTicket)
+router.delete('/:id', requireProjectRole('admin', 'developer'), deleteTicket)
 
 module.exports = router

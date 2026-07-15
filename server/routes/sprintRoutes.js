@@ -8,13 +8,17 @@ const {
   assignTicketToSprint
 } = require('../controllers/sprintsController')
 const authMiddleware = require('../middleware/authMiddleware')
+const { requireProjectRole } = require('../middleware/roleMiddleware')
 
 router.use(authMiddleware)
 
+//Anyone can view sprints
 router.get('/', getSprints)
-router.post('/', createSprint)
-router.put('/:id', updateSprint)
-router.delete('/:id', deleteSprint)
-router.post('/:id/assign', assignTicketToSprint)
+
+//Only admins and developers can create/edit/delete sprints
+router.post('/', requireProjectRole('admin', 'developer'), createSprint)
+router.put('/:id', requireProjectRole('admin', 'developer'), updateSprint)
+router.delete('/:id', requireProjectRole('admin', 'developer'), deleteSprint)
+router.post('/:id/assign', requireProjectRole('admin', 'developer'), assignTicketToSprint)
 
 module.exports = router
