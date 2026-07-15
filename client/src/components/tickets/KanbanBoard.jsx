@@ -20,11 +20,15 @@ const COLUMNS = [
   { id: 'done', label: 'Done' },
 ]
 
-function KanbanBoard({ tickets, onTicketMove, projectId }) {
+function KanbanBoard({ tickets, onTicketMove, projectId, myRole }) {
   const [activeTicket, setActiveTicket] = useState(null)
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -35,6 +39,7 @@ function KanbanBoard({ tickets, onTicketMove, projectId }) {
   }
 
   const handleDragStart = (event) => {
+    if (myRole === 'viewer') return
     const { active } = event
     const ticket = tickets.find(t => t.id === active.id)
     setActiveTicket(ticket)
@@ -45,6 +50,7 @@ function KanbanBoard({ tickets, onTicketMove, projectId }) {
     setActiveTicket(null)
 
     if (!over) return
+    if (myRole === 'viewer') return
 
     const ticketId = active.id
     const newStatus = over.id
@@ -53,6 +59,22 @@ function KanbanBoard({ tickets, onTicketMove, projectId }) {
     if (!ticket || ticket.status === newStatus) return
 
     onTicketMove(ticketId, newStatus)
+  }
+
+  //Viewers just see the board without drag and drop
+  if (myRole === 'viewer') {
+    return (
+      <div className="flex gap-4 overflow-x-auto pb-4">
+        {COLUMNS.map(column => (
+          <KanbanColumn
+            key={column.id}
+            column={column}
+            tickets={getTicketsByStatus(column.id)}
+            projectId={projectId}
+          />
+        ))}
+      </div>
+    )
   }
 
   return (

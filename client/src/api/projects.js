@@ -52,3 +52,14 @@ export const removeProjectMember = async (projectId, userId) => {
   })
   return res.data
 }
+
+export const fetchMyProjectRole = async (projectId) => {
+  const res = await axios.get(`${API_URL}/${projectId}/members`, {
+    headers: getAuthHeader()
+  })
+  const token = localStorage.getItem('token')
+  const payload = JSON.parse(atob(token.split('.')[1]))
+  const myId = payload.id
+  const me = res.data.members.find(m => m.id === myId)
+  return me ? me.role : 'admin'
+}

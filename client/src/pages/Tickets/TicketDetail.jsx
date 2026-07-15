@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { fetchTicket, deleteTicket, updateTicket } from '../../api/tickets'
+import { fetchMyProjectRole } from '../../api/projects'
+import { useAuth } from '../../context/AuthContext'
 
 function TicketDetail() {
   const { projectId, ticketId } = useParams()
@@ -11,21 +13,24 @@ function TicketDetail() {
   const [showEditModal, setShowEditModal] = useState(false)
   const [saving, setSaving] = useState(false)
   const [editTicket, setEditTicket] = useState({})
+  const [myRole, setMyRole] = useState('viewer')
 
   useEffect(() => {
     loadTicket()
   }, [ticketId])
 
   const loadTicket = async () => {
-    try {
-      const data = await fetchTicket(projectId, ticketId)
-      setTicket(data)
-    } catch (err) {
-      setError('Failed to load ticket')
-    } finally {
-      setLoading(false)
-    }
+  try {
+    const data = await fetchTicket(projectId, ticketId)
+    setTicket(data)
+    const role = await fetchMyProjectRole(projectId)
+    setMyRole(role)
+  } catch (err) {
+    setError('Failed to load ticket')
+  } finally {
+    setLoading(false)
   }
+}
 
   const handleEditOpen = () => {
     setEditTicket({
@@ -134,20 +139,22 @@ function TicketDetail() {
               </span>
             </div>
           </div>
-          <div className="flex gap-2 ml-4">
-            <button
-              onClick={handleEditOpen}
-              className="text-sm text-blue-500 hover:text-blue-700 border border-blue-200 px-3 py-1.5 rounded-md hover:bg-blue-50 transition-colors"
-            >
-              Edit
-            </button>
-            <button
-              onClick={handleDelete}
-              className="text-sm text-red-500 hover:text-red-700 border border-red-200 px-3 py-1.5 rounded-md hover:bg-red-50 transition-colors"
-            >
-              Delete
-            </button>
-          </div>
+          {(myRole === 'admin' || myRole === 'developer') && (
+            <div className="flex gap-2 ml-4">
+              <button
+                onClick={handleEditOpen}
+                className="text-sm text-blue-500 hover:text-blue-700 border border-blue-200 px-3 py-1.5 rounded-md hover:bg-blue-50 transition-colors"
+              >
+                Edit
+              </button>
+              <button
+                onClick={handleDelete}
+                className="text-sm text-red-500 hover:text-red-700 border border-red-200 px-3 py-1.5 rounded-md hover:bg-red-50 transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { fetchProject, deleteProject, updateProject } from '../../api/projects'
 import { fetchTickets, createTicket, updateTicket } from '../../api/tickets'
 import KanbanBoard from '../../components/tickets/KanbanBoard'
 import { fetchSprints } from '../../api/sprints'
 import SprintPanel from '../../components/tickets/SprintPanel'
 import MembersPanel from '../../components/layout/MembersPanel'
+import { fetchProject, deleteProject, updateProject, fetchMyProjectRole } from '../../api/projects'
 
 function ProjectDetail() {
   const { id } = useParams()
@@ -20,6 +20,7 @@ function ProjectDetail() {
   const [saving, setSaving] = useState(false)
   const [view, setView] = useState('kanban')
   const [sprints, setSprints] = useState([])
+  const [myRole, setMyRole] = useState('admin')
   const [filters, setFilters] = useState({
     priority: 'all',
     type: 'all',
@@ -41,21 +42,23 @@ function ProjectDetail() {
   }, [id])
 
   const loadData = async () => {
-    try {
-      const [projectData, ticketsData, sprintsData] = await Promise.all([
-        fetchProject(id),
-        fetchTickets(id),
-        fetchSprints(id)
-      ])
-      setProject(projectData)
-      setTickets(ticketsData)
-      setSprints(sprintsData)
-    } catch (err) {
-      setError('Failed to load project')
-    } finally {
-      setLoading(false)
-    }
+  try {
+    const [projectData, ticketsData, sprintsData, roleData] = await Promise.all([
+      fetchProject(id),
+      fetchTickets(id),
+      fetchSprints(id),
+      fetchMyProjectRole(id)
+    ])
+    setProject(projectData)
+    setTickets(ticketsData)
+    setSprints(sprintsData)
+    setMyRole(roleData)
+  } catch (err) {
+    setError('Failed to load project')
+  } finally {
+    setLoading(false)
   }
+}
 
   const handleDelete = async () => {
     if (!window.confirm('Are you sure you want to delete this project?')) return
@@ -102,16 +105,17 @@ function ProjectDetail() {
   }
 
   const handleTicketMove = async (ticketId, newStatus) => {
-    setTickets(tickets.map(t =>
-      t.id === ticketId ? { ...t, status: newStatus } : t
-    ))
-    try {
-      await updateTicket(id, ticketId, { status: newStatus })
-    } catch (err) {
-      setError('Failed to update ticket status')
-      loadData()
-    }
+  if (myRole === 'viewer') return
+  
+  setTickets(tickets.map(t =>
+    t.id === ticketId ? { ...t, status: newStatus } : t
+  ))
+  try {
+    await updateTicket(id, ticketId, { status: newStatus })
+  } catch (err) {
+    loadData()
   }
+}
 
   const getPriorityColor = (priority) => {
     const colors = {
@@ -173,35 +177,39 @@ function ProjectDetail() {
             </div>
           </div>
           <div className="flex gap-2">
-            <button
-              onClick={handleEditOpen}
-              className="text-sm text-blue-500 hover:text-blue-700 border border-blue-200 px-3 py-1.5 rounded-md hover:bg-blue-50 transition-colors"
-            >
-              Edit Project
-            </button>
-            <button
-              onClick={handleDelete}
-              className="text-sm text-red-500 hover:text-red-700 border border-red-200 px-3 py-1.5 rounded-md hover:bg-red-50 transition-colors"
-            >
-              Delete Project
-            </button>
+            {myRole === 'admin' && (
+              <button
+                onClick={handleEditOpen}
+                className="text-sm text-blue-500 hover:text-blue-700 border border-blue-200 px-3 py-1.5 rounded-md hover:bg-blue-50 transition-colors"
+              >
+                Edit Project
+              </button>
+            )}
+            {myRole === 'admin' && (
+              <button
+                onClick={handleDelete}
+                className="text-sm text-red-500 hover:text-red-700 border border-red-200 px-3 py-1.5 rounded-md hover:bg-red-50 transition-colors"
+              >
+                Delete Project
+              </button>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Members Panel */}
       <MembersPanel
         projectId={id}
         ownerId={project.owner_id}
+        myRole={myRole}
       />
 
-      {/* Sprint Panel */}
       <SprintPanel
         sprints={sprints}
         setSprints={setSprints}
         tickets={tickets}
         setTickets={setTickets}
         projectId={id}
+        myRole={myRole}
       />
 
       {/* Tickets Section */}
@@ -228,12 +236,14 @@ function ProjectDetail() {
                 </button>
               </div>
             </div>
-            <button
-              onClick={() => setShowTicketModal(true)}
-              className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
-            >
-              + New Ticket
-            </button>
+            {(myRole === 'admin' || myRole === 'developer') && (
+              <button
+                onClick={() => setShowTicketModal(true)}
+                className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
+              >
+                + New Ticket
+              </button>
+            )}
           </div>
 
           {/* Filters */}

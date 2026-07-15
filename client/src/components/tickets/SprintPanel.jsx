@@ -7,7 +7,7 @@ const STATUS_COLORS = {
   completed: 'bg-blue-100 text-blue-600',
 }
 
-function SprintPanel({ sprints, setSprints, tickets, setTickets, projectId }) {
+function SprintPanel({ sprints, setSprints, tickets, setTickets, projectId, myRole }) {
   const [showModal, setShowModal] = useState(false)
   const [creating, setCreating] = useState(false)
   const [newSprint, setNewSprint] = useState({ name: '', start_date: '', end_date: '' })
@@ -48,29 +48,31 @@ function SprintPanel({ sprints, setSprints, tickets, setTickets, projectId }) {
   }
 
   const handleAssignTicket = async (sprintId, ticketId) => {
-  try {
-    await assignTicketToSprint(projectId, sprintId, ticketId)
-    setTickets(tickets.map(t => 
-      t.id === ticketId ? { ...t, sprint_id: sprintId } : t
-    ))
-    setSprints(sprints.map(s =>
-      s.id === sprintId ? { ...s, ticket_count: s.ticket_count + 1 } : s
-    ))
-  } catch (err) {
-    console.error('Failed to assign ticket')
+    try {
+      await assignTicketToSprint(projectId, sprintId, ticketId)
+      setTickets(tickets.map(t =>
+        t.id === ticketId ? { ...t, sprint_id: sprintId } : t
+      ))
+      setSprints(sprints.map(s =>
+        s.id === sprintId ? { ...s, ticket_count: s.ticket_count + 1 } : s
+      ))
+    } catch (err) {
+      console.error('Failed to assign ticket')
+    }
   }
-}
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold text-gray-800">Sprints</h2>
-        <button
-          onClick={() => setShowModal(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
-        >
-          + New Sprint
-        </button>
+        {(myRole === 'admin' || myRole === 'developer') && (
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
+          >
+            + New Sprint
+          </button>
+        )}
       </div>
 
       {sprints.length === 0 ? (
@@ -106,23 +108,25 @@ function SprintPanel({ sprints, setSprints, tickets, setTickets, projectId }) {
                     {sprint.ticket_count} tickets
                   </span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <select
-                    value={sprint.status}
-                    onChange={(e) => handleStatusChange(sprint, e.target.value)}
-                    className="border border-gray-200 rounded-md px-2 py-1 text-xs text-gray-600 focus:outline-none"
-                  >
-                    <option value="planning">Planning</option>
-                    <option value="active">Active</option>
-                    <option value="completed">Completed</option>
-                  </select>
-                  <button
-                    onClick={() => handleDelete(sprint.id)}
-                    className="text-gray-400 hover:text-red-500 text-sm transition-colors"
-                  >
-                    ✕
-                  </button>
-                </div>
+                {(myRole === 'admin' || myRole === 'developer') && (
+                  <div className="flex items-center gap-2">
+                    <select
+                      value={sprint.status}
+                      onChange={(e) => handleStatusChange(sprint, e.target.value)}
+                      className="border border-gray-200 rounded-md px-2 py-1 text-xs text-gray-600 focus:outline-none"
+                    >
+                      <option value="planning">Planning</option>
+                      <option value="active">Active</option>
+                      <option value="completed">Completed</option>
+                    </select>
+                    <button
+                      onClick={() => handleDelete(sprint.id)}
+                      className="text-gray-400 hover:text-red-500 text-sm transition-colors"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* Sprint Tickets */}
@@ -133,12 +137,14 @@ function SprintPanel({ sprints, setSprints, tickets, setTickets, projectId }) {
                     {tickets.map(ticket => (
                       <div key={ticket.id} className="flex items-center justify-between text-sm py-1">
                         <span className="text-gray-700">{ticket.title}</span>
-                        <button
-                          onClick={() => handleAssignTicket(sprint.id, ticket.id)}
-                          className="text-xs text-blue-600 hover:underline"
-                        >
-                          {ticket.sprint_id === sprint.id ? '✓ Assigned' : 'Assign'}
-                        </button>
+                        {(myRole === 'admin' || myRole === 'developer') && (
+                          <button
+                            onClick={() => handleAssignTicket(sprint.id, ticket.id)}
+                            className="text-xs text-blue-600 hover:underline"
+                          >
+                            {ticket.sprint_id === sprint.id ? '✓ Assigned' : 'Assign'}
+                          </button>
+                        )}
                       </div>
                     ))}
                     {tickets.length === 0 && (
