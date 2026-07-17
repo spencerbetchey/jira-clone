@@ -188,4 +188,25 @@ const getAllTickets = async (req, res) => {
   }
 }
 
-module.exports = { getTickets, getTicket, createTicket, updateTicket, deleteTicket, getAllTickets }
+//Get history/activity log for a ticket
+const getTicketHistory = async (req, res) => {
+  const { ticketId } = req.params
+
+  try {
+    const [rows] = await pool.query(
+      `SELECT th.*, u.name as user_name
+       FROM ticket_history th
+       JOIN users u ON th.user_id = u.id
+       WHERE th.ticket_id = ?
+       ORDER BY th.changed_at DESC`,
+      [ticketId]
+    )
+
+    res.json({ history: rows })
+  } catch (error) {
+    console.error('GetTicketHistory error:', error)
+    res.status(500).json({ message: 'Server error' })
+  }
+}
+
+module.exports = { getTickets, getTicket, createTicket, updateTicket, deleteTicket, getAllTickets, getTicketHistory }

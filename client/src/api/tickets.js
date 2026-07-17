@@ -48,3 +48,10 @@ export const fetchAllTickets = async () => {
   })
   return res.data.tickets
 }
+
+export const fetchTicketHistory = async (ticketId) => {
+  const res = await axios.get(`http://localhost:5000/api/tickets/${ticketId}/history`, {
+    headers: getAuthHeader()
+  })
+  return res.data.history
+}

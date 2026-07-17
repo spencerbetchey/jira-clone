@@ -4,6 +4,7 @@ import { fetchTicket, deleteTicket, updateTicket } from '../../api/tickets'
 import { fetchMyProjectRole } from '../../api/projects'
 import { useAuth } from '../../context/AuthContext'
 import CommentSection from '../../components/tickets/CommentSection'
+import TicketHistory from '../../components/tickets/TicketHistory'
 
 function TicketDetail() {
   const { projectId, ticketId } = useParams()
@@ -161,6 +162,7 @@ function TicketDetail() {
 
       {/* Comments */}
       <CommentSection ticketId={ticketId} />
+      <TicketHistory ticketId={ticketId} />
 
       {/* Edit Ticket Modal */}
       {showEditModal && (
