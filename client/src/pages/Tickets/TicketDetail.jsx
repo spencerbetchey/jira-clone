@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import { fetchTicket, deleteTicket, updateTicket } from '../../api/tickets'
 import { fetchMyProjectRole } from '../../api/projects'
 import { useAuth } from '../../context/AuthContext'
+import CommentSection from '../../components/tickets/CommentSection'
 
 function TicketDetail() {
   const { projectId, ticketId } = useParams()
@@ -20,17 +21,17 @@ function TicketDetail() {
   }, [ticketId])
 
   const loadTicket = async () => {
-  try {
-    const data = await fetchTicket(projectId, ticketId)
-    setTicket(data)
-    const role = await fetchMyProjectRole(projectId)
-    setMyRole(role)
-  } catch (err) {
-    setError('Failed to load ticket')
-  } finally {
-    setLoading(false)
+    try {
+      const data = await fetchTicket(projectId, ticketId)
+      setTicket(data)
+      const role = await fetchMyProjectRole(projectId)
+      setMyRole(role)
+    } catch (err) {
+      setError('Failed to load ticket')
+    } finally {
+      setLoading(false)
+    }
   }
-}
 
   const handleEditOpen = () => {
     setEditTicket({
@@ -157,6 +158,9 @@ function TicketDetail() {
           )}
         </div>
       </div>
+
+      {/* Comments */}
+      <CommentSection ticketId={ticketId} />
 
       {/* Edit Ticket Modal */}
       {showEditModal && (
