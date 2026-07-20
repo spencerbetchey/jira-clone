@@ -9,6 +9,7 @@ import Projects from './pages/Projects/Projects'
 import ProjectDetail from './pages/Projects/ProjectDetail'
 import Tickets from './pages/Tickets/Tickets'
 import TicketDetail from './pages/Tickets/TicketDetail'
+import Profile from './pages/Profile/Profile'
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
       <Route path="/projects/:id" element={<ProtectedRoute><Layout><ProjectDetail /></Layout></ProtectedRoute>} />
       <Route path="/projects/:projectId/tickets/:ticketId" element={<ProtectedRoute><Layout><TicketDetail /></Layout></ProtectedRoute>} />
       <Route path="/tickets" element={<ProtectedRoute><Layout><Tickets /></Layout></ProtectedRoute>} />
+      <Route path="/profile" element={<ProtectedRoute><Layout><Profile /></Layout></ProtectedRoute>} />
     </Routes>
   )
 }
