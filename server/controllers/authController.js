@@ -116,4 +116,40 @@ const getMe = async (req, res) => {
   }
 }
 
-module.exports = { register, login, getMe }
+//Update the logged in user's name/email
+const updateMe = async (req, res) => {
+  const { name, email } = req.body
+
+  if (!name || !email) {
+    return res.status(400).json({ message: 'Name and email are required' })
+  }
+
+  try {
+    //Make sure the new email isn't already used by a different user
+    const [existing] = await pool.query(
+      'SELECT id FROM users WHERE email = ? AND id != ?',
+      [email, req.userId]
+    )
+
+    if (existing.length > 0) {
+      return res.status(400).json({ message: 'Email already in use' })
+    }
+
+    await pool.query(
+      'UPDATE users SET name = ?, email = ? WHERE id = ?',
+      [name, email, req.userId]
+    )
+
+    const [rows] = await pool.query(
+      'SELECT id, name, email, role FROM users WHERE id = ?',
+      [req.userId]
+    )
+
+    res.json({ message: 'Profile updated successfully', user: rows[0] })
+  } catch (error) {
+    console.error('UpdateMe error:', error)
+    res.status(500).json({ message: 'Server error' })
+  }
+}
+
+module.exports = { register, login, getMe, updateMe }

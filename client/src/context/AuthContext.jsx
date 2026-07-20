@@ -38,12 +38,17 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('token')
   }
 
+  //Update user info in context after a profile edit, no new token needed
+  const updateUser = (userData) => {
+    setUser(userData)
+  }
+
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center text-gray-400">Loading...</div>
   }
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   )
