@@ -1,5 +1,6 @@
 import { useDraggable } from '@dnd-kit/core'
 import { Link } from 'react-router-dom'
+import Avatar from '../common/Avatar'
 
 const PRIORITY_COLORS = {
   lowest: 'bg-gray-100 text-gray-600',
@@ -54,9 +55,12 @@ function KanbanTicket({ ticket, projectId, isDragging }) {
 
       {/* Footer */}
       <div className="flex items-center justify-between mt-2">
-        <span className="text-xs text-gray-400">
-          {ticket.assignee_name || 'Unassigned'}
-        </span>
+        <div className="flex items-center gap-1.5">
+          <Avatar name={ticket.assignee_name} size="sm" />
+          <span className="text-xs text-gray-400">
+            {ticket.assignee_name || 'Unassigned'}
+          </span>
+        </div>
         <span className="text-xs text-gray-400">
           #{ticket.id}
         </span>

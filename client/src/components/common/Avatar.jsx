@@ -27,9 +27,17 @@ function hashNameToIndex(name, paletteLength) {
 }
 
 function Avatar({ name, size = 'md' }) {
-  const safeName = name || '?'
-  const colorClass = AVATAR_COLORS[hashNameToIndex(safeName, AVATAR_COLORS.length)]
-  const initial = safeName.charAt(0).toUpperCase()
+  //No name means unassigned/unknown, show a neutral placeholder instead of hashing a color
+  if (!name) {
+    return (
+      <div className={`rounded-full flex items-center justify-center font-semibold flex-shrink-0 bg-gray-100 text-gray-400 ${SIZES[size]}`}>
+        ?
+      </div>
+    )
+  }
+
+  const colorClass = AVATAR_COLORS[hashNameToIndex(name, AVATAR_COLORS.length)]
+  const initial = name.charAt(0).toUpperCase()
 
   return (
     <div
