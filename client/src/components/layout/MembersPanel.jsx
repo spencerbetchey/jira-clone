@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { fetchProjectMembers, addProjectMember, removeProjectMember } from '../../api/projects'
 import { useAuth } from '../../context/AuthContext'
+import Avatar from '../common/Avatar'
 
 const ROLE_COLORS = {
   admin: 'bg-purple-100 text-purple-600',
@@ -82,9 +83,7 @@ function MembersPanel({ projectId, ownerId }) {
         {members.map(member => (
           <div key={member.id} className="py-3 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-sm font-semibold">
-                {member.name.charAt(0).toUpperCase()}
-              </div>
+              <Avatar name={member.name} />
               <div>
                 <p className="text-sm font-medium text-gray-800">{member.name}</p>
                 <p className="text-xs text-gray-400">{member.email}</p>

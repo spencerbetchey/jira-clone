@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { fetchComments, createComment, deleteComment } from '../../api/comments'
 import { useAuth } from '../../context/AuthContext'
+import Avatar from '../common/Avatar'
 
 function CommentSection({ ticketId }) {
   const { user } = useAuth()
@@ -73,10 +74,7 @@ function CommentSection({ ticketId }) {
         <div className="space-y-4 mb-6">
           {comments.map(comment => (
             <div key={comment.id} className="flex gap-3">
-              {/* Avatar */}
-              <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-sm font-semibold flex-shrink-0">
-                {comment.user_name.charAt(0).toUpperCase()}
-              </div>
+              <Avatar name={comment.user_name} />
 
               {/* Comment Body */}
               <div className="flex-1">
@@ -107,9 +105,7 @@ function CommentSection({ ticketId }) {
 
       {/* New Comment Input */}
       <div className="flex gap-3">
-        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-sm font-semibold flex-shrink-0">
-          {user?.name.charAt(0).toUpperCase()}
-        </div>
+        <Avatar name={user?.name} />
         <div className="flex-1">
           <textarea
             value={body}
