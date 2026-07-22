@@ -4,7 +4,11 @@ const pool = require('../config/db')
 const getProjects = async (req, res) => {
   try {
     const [rows] = await pool.query(
-      `SELECT p.*, u.name as owner_name 
+      `SELECT p.*, u.name as owner_name,
+        EXISTS(
+          SELECT 1 FROM sprints s
+          WHERE s.project_id = p.id AND s.status = 'active'
+        ) as has_active_sprint
        FROM projects p
        JOIN users u ON p.owner_id = u.id
        WHERE p.owner_id = ? 

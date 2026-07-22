@@ -32,6 +32,9 @@ function Dashboard() {
 
   if (loading) return <div className="text-gray-500">Loading...</div>
 
+  const activeProjectsCount = projects.filter(p => p.has_active_sprint).length
+  const openTicketsCount = tickets.filter(t => t.status !== 'done').length
+
   return (
     <div>
       {/* Welcome Header */}
@@ -50,11 +53,11 @@ function Dashboard() {
         </div>
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
           <p className="text-sm text-gray-500">Active Projects</p>
-          <p className="text-3xl font-bold text-blue-600 mt-1">{projects.length}</p>
+          <p className="text-3xl font-bold text-blue-600 mt-1">{activeProjectsCount}</p>
         </div>
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-          <p className="text-sm text-gray-500">Team Members</p>
-          <p className="text-3xl font-bold text-gray-800 mt-1">1</p>
+          <p className="text-sm text-gray-500">Open Tickets</p>
+          <p className="text-3xl font-bold text-gray-800 mt-1">{openTicketsCount}</p>
         </div>
       </div>
 
