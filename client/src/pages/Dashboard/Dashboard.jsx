@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { fetchProjects } from '../../api/projects'
+import { fetchAllTickets } from '../../api/tickets'
 import { useAuth } from '../../context/AuthContext'
+import AnalyticsCharts from '../../components/dashboard/AnalyticsCharts'
 
 function Dashboard() {
   const { user } = useAuth()
   const [projects, setProjects] = useState([])
+  const [tickets, setTickets] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -14,8 +17,12 @@ function Dashboard() {
 
   const loadDashboard = async () => {
     try {
-      const projectsData = await fetchProjects()
+      const [projectsData, ticketsData] = await Promise.all([
+        fetchProjects(),
+        fetchAllTickets()
+      ])
       setProjects(projectsData)
+      setTickets(ticketsData)
     } catch (err) {
       console.error('Failed to load dashboard')
     } finally {
@@ -50,6 +57,9 @@ function Dashboard() {
           <p className="text-3xl font-bold text-gray-800 mt-1">1</p>
         </div>
       </div>
+
+      {/* Analytics */}
+      <AnalyticsCharts tickets={tickets} />
 
       {/* Recent Projects */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
