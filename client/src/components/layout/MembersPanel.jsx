@@ -64,10 +64,10 @@ function MembersPanel({ projectId, ownerId }) {
   if (loading) return null
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-gray-800">
-          Members <span className="text-gray-400 font-normal text-sm">({members.length})</span>
+        <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+          Members <span className="text-gray-400 dark:text-gray-500 font-normal text-sm">({members.length})</span>
         </h2>
         {user?.id === ownerId && (
           <button
@@ -79,14 +79,14 @@ function MembersPanel({ projectId, ownerId }) {
         )}
       </div>
 
-      <div className="divide-y divide-gray-100">
+      <div className="divide-y divide-gray-100 dark:divide-gray-700">
         {members.map(member => (
           <div key={member.id} className="py-3 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Avatar name={member.name} />
               <div>
-                <p className="text-sm font-medium text-gray-800">{member.name}</p>
-                <p className="text-xs text-gray-400">{member.email}</p>
+                <p className="text-sm font-medium text-gray-800 dark:text-gray-100">{member.name}</p>
+                <p className="text-xs text-gray-400 dark:text-gray-500">{member.email}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -109,8 +109,8 @@ function MembersPanel({ projectId, ownerId }) {
       {/* Add Member Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100]">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">Add Member</h2>
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md p-6">
+            <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Add Member</h2>
 
             {error && (
               <div className="bg-red-50 text-red-600 px-4 py-3 rounded-md mb-4 text-sm">
@@ -120,22 +120,22 @@ function MembersPanel({ projectId, ownerId }) {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Email Address</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="teammate@example.com"
                   autoFocus
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Role</label>
                 <select
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="admin">Admin</option>
                   <option value="developer">Developer</option>
@@ -147,7 +147,7 @@ function MembersPanel({ projectId, ownerId }) {
             <div className="flex gap-3 mt-6 justify-end">
               <button
                 onClick={() => { setShowModal(false); setError('') }}
-                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
+                className="px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 transition-colors"
               >
                 Cancel
               </button>

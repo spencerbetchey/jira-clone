@@ -59,8 +59,8 @@ function Projects() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Projects</h1>
-          <p className="text-gray-500 text-sm mt-1">Manage your projects</p>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Projects</h1>
+          <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Manage your projects</p>
         </div>
         <button
           onClick={() => setShowModal(true)}
@@ -78,16 +78,16 @@ function Projects() {
 
       {/* Projects Grid */}
       {projects.length === 0 ? (
-        <div className="text-center py-16 text-gray-400">
+        <div className="text-center py-16 text-gray-400 dark:text-gray-500">
           <p className="text-lg">No projects yet</p>
           <p className="text-sm mt-1">Create your first project to get started</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {projects.map(project => (
-            <div key={project.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+            <div key={project.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-5 hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between">
-                <h2 className="font-semibold text-gray-800">{project.name}</h2>
+                <h2 className="font-semibold text-gray-800 dark:text-gray-100">{project.name}</h2>
                 <button
                   onClick={() => handleDelete(project.id)}
                   className="text-gray-400 hover:text-red-500 text-sm transition-colors"
@@ -95,11 +95,11 @@ function Projects() {
                   ✕
                 </button>
               </div>
-              <p className="text-gray-500 text-sm mt-1 mb-4">
+              <p className="text-gray-500 dark:text-gray-400 text-sm mt-1 mb-4">
                 {project.description || 'No description'}
               </p>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-gray-400 dark:text-gray-500">
                   {new Date(project.created_at).toLocaleDateString()}
                 </span>
                 <Link
@@ -117,32 +117,32 @@ function Projects() {
       {/* Create Project Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">Create New Project</h2>
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md p-6">
+            <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Create New Project</h2>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                   Project Name
                 </label>
                 <input
                   type="text"
                   value={newProject.name}
                   onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="My awesome project"
                   autoFocus
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                   Description
                 </label>
                 <textarea
                   value={newProject.description}
                   onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="What is this project about?"
                   rows={3}
                 />
@@ -152,7 +152,7 @@ function Projects() {
             <div className="flex gap-3 mt-6 justify-end">
               <button
                 onClick={() => setShowModal(false)}
-                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
+                className="px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 transition-colors"
               >
                 Cancel
               </button>

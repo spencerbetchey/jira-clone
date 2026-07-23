@@ -62,9 +62,9 @@ function SprintPanel({ sprints, setSprints, tickets, setTickets, projectId, myRo
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-gray-800">Sprints</h2>
+        <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">Sprints</h2>
         {(myRole === 'admin' || myRole === 'developer') && (
           <button
             onClick={() => setShowModal(true)}
@@ -76,27 +76,27 @@ function SprintPanel({ sprints, setSprints, tickets, setTickets, projectId, myRo
       </div>
 
       {sprints.length === 0 ? (
-        <div className="text-center py-8 text-gray-400">
+        <div className="text-center py-8 text-gray-400 dark:text-gray-500">
           <p>No sprints yet</p>
           <p className="text-sm mt-1">Create a sprint to start planning your work</p>
         </div>
       ) : (
         <div className="space-y-3">
           {sprints.map(sprint => (
-            <div key={sprint.id} className="border border-gray-200 rounded-lg overflow-hidden">
+            <div key={sprint.id} className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
               {/* Sprint Header */}
-              <div className="flex items-center justify-between p-4 bg-gray-50">
+              <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700">
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => setExpandedSprint(expandedSprint === sprint.id ? null : sprint.id)}
-                    className="text-gray-400 hover:text-gray-600"
+                    className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
                   >
                     {expandedSprint === sprint.id ? '▼' : '▶'}
                   </button>
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-800">{sprint.name}</h3>
+                    <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100">{sprint.name}</h3>
                     {sprint.start_date && (
-                      <p className="text-xs text-gray-400 mt-0.5">
+                      <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
                         {new Date(sprint.start_date).toLocaleDateString()} — {new Date(sprint.end_date).toLocaleDateString()}
                       </p>
                     )}
@@ -104,7 +104,7 @@ function SprintPanel({ sprints, setSprints, tickets, setTickets, projectId, myRo
                   <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_COLORS[sprint.status]}`}>
                     {sprint.status}
                   </span>
-                  <span className="text-xs text-gray-400">
+                  <span className="text-xs text-gray-400 dark:text-gray-500">
                     {sprint.ticket_count} tickets
                   </span>
                 </div>
@@ -113,7 +113,7 @@ function SprintPanel({ sprints, setSprints, tickets, setTickets, projectId, myRo
                     <select
                       value={sprint.status}
                       onChange={(e) => handleStatusChange(sprint, e.target.value)}
-                      className="border border-gray-200 rounded-md px-2 py-1 text-xs text-gray-600 focus:outline-none"
+                      className="border border-gray-200 dark:border-gray-700 dark:bg-gray-800 rounded-md px-2 py-1 text-xs text-gray-600 dark:text-gray-300 focus:outline-none"
                     >
                       <option value="planning">Planning</option>
                       <option value="active">Active</option>
@@ -132,11 +132,11 @@ function SprintPanel({ sprints, setSprints, tickets, setTickets, projectId, myRo
               {/* Sprint Tickets */}
               {expandedSprint === sprint.id && (
                 <div className="p-4">
-                  <p className="text-xs text-gray-500 font-medium mb-2">Assign tickets to this sprint:</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 font-medium mb-2">Assign tickets to this sprint:</p>
                   <div className="space-y-2">
                     {tickets.map(ticket => (
                       <div key={ticket.id} className="flex items-center justify-between text-sm py-1">
-                        <span className="text-gray-700">{ticket.title}</span>
+                        <span className="text-gray-700 dark:text-gray-200">{ticket.title}</span>
                         {(myRole === 'admin' || myRole === 'developer') && (
                           <button
                             onClick={() => handleAssignTicket(sprint.id, ticket.id)}
@@ -148,7 +148,7 @@ function SprintPanel({ sprints, setSprints, tickets, setTickets, projectId, myRo
                       </div>
                     ))}
                     {tickets.length === 0 && (
-                      <p className="text-xs text-gray-400">No tickets in this project yet</p>
+                      <p className="text-xs text-gray-400 dark:text-gray-500">No tickets in this project yet</p>
                     )}
                   </div>
                 </div>
@@ -161,37 +161,37 @@ function SprintPanel({ sprints, setSprints, tickets, setTickets, projectId, myRo
       {/* Create Sprint Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100]">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">Create New Sprint</h2>
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md p-6">
+            <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Create New Sprint</h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Sprint Name</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Sprint Name</label>
                 <input
                   type="text"
                   value={newSprint.name}
                   onChange={(e) => setNewSprint({ ...newSprint, name: e.target.value })}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Sprint 1"
                   autoFocus
                 />
               </div>
               <div className="flex gap-4">
                 <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Start Date</label>
                   <input
                     type="date"
                     value={newSprint.start_date}
                     onChange={(e) => setNewSprint({ ...newSprint, start_date: e.target.value })}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">End Date</label>
                   <input
                     type="date"
                     value={newSprint.end_date}
                     onChange={(e) => setNewSprint({ ...newSprint, end_date: e.target.value })}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -199,7 +199,7 @@ function SprintPanel({ sprints, setSprints, tickets, setTickets, projectId, myRo
             <div className="flex gap-3 mt-6 justify-end">
               <button
                 onClick={() => setShowModal(false)}
-                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
+                className="px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 transition-colors"
               >
                 Cancel
               </button>

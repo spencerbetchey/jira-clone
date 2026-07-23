@@ -32,7 +32,7 @@ function KanbanTicket({ ticket, projectId, isDragging }) {
       style={style}
       {...listeners}
       {...attributes}
-      className={`bg-white rounded-lg p-3 shadow-sm border border-gray-200 cursor-grab active:cursor-grabbing transition-shadow ${isDragging ? 'opacity-50' : 'hover:shadow-md'}`}
+      className={`bg-white dark:bg-gray-800 rounded-lg p-3 shadow-sm border border-gray-200 dark:border-gray-700 cursor-grab active:cursor-grabbing transition-shadow ${isDragging ? 'opacity-50' : 'hover:shadow-md'}`}
     >
       {/* Type badge */}
       <div className="flex items-center justify-between mb-2">
@@ -47,7 +47,7 @@ function KanbanTicket({ ticket, projectId, isDragging }) {
       {/* Title */}
       <Link
         to={`/projects/${projectId}/tickets/${ticket.id}`}
-        className="text-sm font-medium text-gray-800 hover:text-blue-600 block mb-2"
+        className="text-sm font-medium text-gray-800 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 block mb-2"
         onClick={(e) => e.stopPropagation()}
       >
         {ticket.title}
@@ -57,11 +57,11 @@ function KanbanTicket({ ticket, projectId, isDragging }) {
       <div className="flex items-center justify-between mt-2">
         <div className="flex items-center gap-1.5">
           <Avatar name={ticket.assignee_name} size="sm" />
-          <span className="text-xs text-gray-400">
+          <span className="text-xs text-gray-400 dark:text-gray-500">
             {ticket.assignee_name || 'Unassigned'}
           </span>
         </div>
-        <span className="text-xs text-gray-400">
+        <span className="text-xs text-gray-400 dark:text-gray-500">
           #{ticket.id}
         </span>
       </div>

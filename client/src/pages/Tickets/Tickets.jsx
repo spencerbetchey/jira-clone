@@ -69,8 +69,8 @@ function Tickets() {
     <div>
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">All Tickets</h1>
-        <p className="text-gray-500 text-sm mt-1">View and search tickets across all your projects</p>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">All Tickets</h1>
+        <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">View and search tickets across all your projects</p>
       </div>
 
       {error && (
@@ -78,20 +78,20 @@ function Tickets() {
       )}
 
       {/* Search and Filters */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-4">
         <div className="flex flex-wrap items-center gap-3">
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search tickets..."
-            className="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-48"
+            className="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-48"
           />
 
           <select
             value={filters.status}
             onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-            className="border border-gray-200 rounded-md px-2 py-1.5 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-200 dark:border-gray-700 dark:bg-gray-700 rounded-md px-2 py-1.5 text-sm text-gray-600 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="all">All Statuses</option>
             <option value="backlog">Backlog</option>
@@ -104,7 +104,7 @@ function Tickets() {
           <select
             value={filters.priority}
             onChange={(e) => setFilters({ ...filters, priority: e.target.value })}
-            className="border border-gray-200 rounded-md px-2 py-1.5 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-200 dark:border-gray-700 dark:bg-gray-700 rounded-md px-2 py-1.5 text-sm text-gray-600 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="all">All Priorities</option>
             <option value="lowest">Lowest</option>
@@ -117,7 +117,7 @@ function Tickets() {
           <select
             value={filters.type}
             onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-            className="border border-gray-200 rounded-md px-2 py-1.5 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-200 dark:border-gray-700 dark:bg-gray-700 rounded-md px-2 py-1.5 text-sm text-gray-600 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="all">All Types</option>
             <option value="task">Task</option>
@@ -135,23 +135,23 @@ function Tickets() {
             </button>
           )}
 
-          <span className="text-xs text-gray-400 ml-auto">
+          <span className="text-xs text-gray-400 dark:text-gray-500 ml-auto">
             {filteredTickets.length} of {tickets.length} tickets
           </span>
         </div>
       </div>
 
       {/* Tickets Table */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
         {filteredTickets.length === 0 ? (
-          <div className="text-center py-16 text-gray-400">
+          <div className="text-center py-16 text-gray-400 dark:text-gray-500">
             <p>No tickets found</p>
             <p className="text-sm mt-1">Try adjusting your search or filters</p>
           </div>
         ) : (
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-gray-100 dark:divide-gray-700">
             {/* Table Header */}
-            <div className="px-4 py-3 grid grid-cols-12 gap-4 text-xs font-medium text-gray-500 uppercase tracking-wide">
+            <div className="px-4 py-3 grid grid-cols-12 gap-4 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
               <div className="col-span-4">Title</div>
               <div className="col-span-2">Project</div>
               <div className="col-span-1">Type</div>
@@ -164,13 +164,13 @@ function Tickets() {
               <Link
                 key={ticket.id}
                 to={`/projects/${ticket.project_id}/tickets/${ticket.id}`}
-                className="px-4 py-3 grid grid-cols-12 gap-4 items-center hover:bg-gray-50 transition-colors"
+                className="px-4 py-3 grid grid-cols-12 gap-4 items-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 <div className="col-span-4">
-                  <p className="text-sm font-medium text-gray-800 truncate">{ticket.title}</p>
+                  <p className="text-sm font-medium text-gray-800 dark:text-gray-100 truncate">{ticket.title}</p>
                 </div>
                 <div className="col-span-2">
-                  <p className="text-xs text-gray-500 truncate">{ticket.project_name}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{ticket.project_name}</p>
                 </div>
                 <div className="col-span-1">
                   <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${TYPE_COLORS[ticket.type]}`}>
@@ -188,7 +188,7 @@ function Tickets() {
                   </span>
                 </div>
                 <div className="col-span-2">
-                  <p className="text-xs text-gray-500">{ticket.reporter_name}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{ticket.reporter_name}</p>
                 </div>
               </Link>
             ))}

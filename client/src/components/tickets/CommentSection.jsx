@@ -57,17 +57,17 @@ function CommentSection({ ticketId }) {
     }
   }
 
-  if (loading) return <div className="text-gray-400 text-sm">Loading comments...</div>
+  if (loading) return <div className="text-gray-400 dark:text-gray-500 text-sm">Loading comments...</div>
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-      <h2 className="text-lg font-semibold text-gray-800 mb-4">
-        Comments <span className="text-gray-400 font-normal text-sm">({comments.length})</span>
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">
+        Comments <span className="text-gray-400 dark:text-gray-500 font-normal text-sm">({comments.length})</span>
       </h2>
 
       {/* Comment List */}
       {comments.length === 0 ? (
-        <div className="text-center py-8 text-gray-400 text-sm">
+        <div className="text-center py-8 text-gray-400 dark:text-gray-500 text-sm">
           No comments yet — be the first to comment!
         </div>
       ) : (
@@ -80,8 +80,8 @@ function CommentSection({ ticketId }) {
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-gray-800">{comment.user_name}</span>
-                    <span className="text-xs text-gray-400">
+                    <span className="text-sm font-medium text-gray-800 dark:text-gray-100">{comment.user_name}</span>
+                    <span className="text-xs text-gray-400 dark:text-gray-500">
                       {new Date(comment.created_at).toLocaleDateString()} at {new Date(comment.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </div>
@@ -94,7 +94,7 @@ function CommentSection({ ticketId }) {
                     </button>
                   )}
                 </div>
-                <div className="bg-gray-50 rounded-lg px-4 py-3 text-sm text-gray-700">
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg px-4 py-3 text-sm text-gray-700 dark:text-gray-200">
                   {comment.body}
                 </div>
               </div>
@@ -113,7 +113,7 @@ function CommentSection({ ticketId }) {
             onKeyDown={handleKeyDown}
             placeholder="Add a comment... (Ctrl+Enter to submit)"
             rows={3}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+            className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
           />
           {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
           <div className="flex justify-end mt-2">

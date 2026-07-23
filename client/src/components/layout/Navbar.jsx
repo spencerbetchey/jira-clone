@@ -1,8 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import { useTheme } from '../../context/ThemeContext'
 
 function Navbar() {
   const { user, logout } = useAuth()
+  const { darkMode, toggleDarkMode } = useTheme()
   const navigate = useNavigate()
 
   const handleLogout = () => {
@@ -11,7 +13,7 @@ function Navbar() {
   }
 
   return (
-    <nav className="bg-blue-600 text-white px-6 py-4 flex items-center justify-between">
+    <nav className="bg-blue-600 dark:bg-gray-800 text-white px-6 py-4 flex items-center justify-between transition-colors">
       <div className="text-xl font-bold">
         <Link to="/dashboard">ProjectFlow</Link>
       </div>
@@ -23,6 +25,13 @@ function Navbar() {
       </div>
 
       <div className="flex items-center gap-4">
+        <button
+          onClick={toggleDarkMode}
+          className="text-white hover:text-blue-200 transition-colors text-lg"
+          title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {darkMode ? '☀️' : '🌙'}
+        </button>
         {user && (
           <Link to="/profile" className="text-sm text-blue-100 hover:text-white transition-colors">
             Hey, {user.name}!

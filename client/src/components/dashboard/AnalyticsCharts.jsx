@@ -60,7 +60,7 @@ function AnalyticsCharts({ tickets }) {
 
   if (tickets.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8 text-center text-gray-400 py-12">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-8 text-center text-gray-400 dark:text-gray-500 py-12">
         No tickets yet — create some to see your analytics
       </div>
     )
@@ -68,8 +68,8 @@ function AnalyticsCharts({ tickets }) {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-        <h2 className="text-sm font-semibold text-gray-800 mb-4">Tickets by Status</h2>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-5">
+        <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-4">Tickets by Status</h2>
         <ResponsiveContainer width="100%" height={220}>
           <BarChart data={statusData}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
@@ -85,8 +85,8 @@ function AnalyticsCharts({ tickets }) {
         </ResponsiveContainer>
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-        <h2 className="text-sm font-semibold text-gray-800 mb-4">Tickets by Priority</h2>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-5">
+        <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-4">Tickets by Priority</h2>
         <ResponsiveContainer width="100%" height={220}>
           <BarChart data={priorityData}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />

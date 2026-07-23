@@ -109,13 +109,13 @@ function TicketDetail() {
     <div>
       <Link
         to={`/projects/${projectId}`}
-        className="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1 mb-6"
+        className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 flex items-center gap-1 mb-6"
       >
         ← Back to Project
       </Link>
 
       {/* Ticket Header */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
@@ -129,14 +129,14 @@ function TicketDetail() {
                 {ticket.priority}
               </span>
             </div>
-            <h1 className="text-2xl font-bold text-gray-800">{ticket.title}</h1>
-            <p className="text-gray-500 mt-2">{ticket.description || 'No description'}</p>
+            <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{ticket.title}</h1>
+            <p className="text-gray-500 dark:text-gray-400 mt-2">{ticket.description || 'No description'}</p>
             <div className="flex gap-4 mt-3">
-              <span className="text-xs text-gray-400">Reporter: {ticket.reporter_name}</span>
-              <span className="text-xs text-gray-400">
+              <span className="text-xs text-gray-400 dark:text-gray-500">Reporter: {ticket.reporter_name}</span>
+              <span className="text-xs text-gray-400 dark:text-gray-500">
                 Assignee: {ticket.assignee_name || 'Unassigned'}
               </span>
-              <span className="text-xs text-gray-400">
+              <span className="text-xs text-gray-400 dark:text-gray-500">
                 Created: {new Date(ticket.created_at).toLocaleDateString()}
               </span>
             </div>
@@ -145,13 +145,13 @@ function TicketDetail() {
             <div className="flex gap-2 ml-4">
               <button
                 onClick={handleEditOpen}
-                className="text-sm text-blue-500 hover:text-blue-700 border border-blue-200 px-3 py-1.5 rounded-md hover:bg-blue-50 transition-colors"
+                className="text-sm text-blue-500 hover:text-blue-700 border border-blue-200 dark:border-blue-800 px-3 py-1.5 rounded-md hover:bg-blue-50 dark:hover:bg-blue-950 transition-colors"
               >
                 Edit
               </button>
               <button
                 onClick={handleDelete}
-                className="text-sm text-red-500 hover:text-red-700 border border-red-200 px-3 py-1.5 rounded-md hover:bg-red-50 transition-colors"
+                className="text-sm text-red-500 hover:text-red-700 border border-red-200 dark:border-red-800 px-3 py-1.5 rounded-md hover:bg-red-50 dark:hover:bg-red-950 transition-colors"
               >
                 Delete
               </button>
@@ -162,40 +162,42 @@ function TicketDetail() {
 
       {/* Comments */}
       <CommentSection ticketId={ticketId} />
+
+      {/* Activity / History */}
       <TicketHistory ticketId={ticketId} />
 
       {/* Edit Ticket Modal */}
       {showEditModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">Edit Ticket</h2>
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md p-6">
+            <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Edit Ticket</h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Title</label>
                 <input
                   type="text"
                   value={editTicket.title}
                   onChange={(e) => setEditTicket({ ...editTicket, title: e.target.value })}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   autoFocus
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Description</label>
                 <textarea
                   value={editTicket.description}
                   onChange={(e) => setEditTicket({ ...editTicket, description: e.target.value })}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   rows={3}
                 />
               </div>
               <div className="flex gap-4">
                 <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Status</label>
                   <select
                     value={editTicket.status}
                     onChange={(e) => setEditTicket({ ...editTicket, status: e.target.value })}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="backlog">Backlog</option>
                     <option value="todo">Todo</option>
@@ -205,11 +207,11 @@ function TicketDetail() {
                   </select>
                 </div>
                 <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Priority</label>
                   <select
                     value={editTicket.priority}
                     onChange={(e) => setEditTicket({ ...editTicket, priority: e.target.value })}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="lowest">Lowest</option>
                     <option value="low">Low</option>
@@ -220,11 +222,11 @@ function TicketDetail() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Type</label>
                 <select
                   value={editTicket.type}
                   onChange={(e) => setEditTicket({ ...editTicket, type: e.target.value })}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="task">Task</option>
                   <option value="bug">Bug</option>
@@ -236,7 +238,7 @@ function TicketDetail() {
             <div className="flex gap-3 mt-6 justify-end">
               <button
                 onClick={() => setShowEditModal(false)}
-                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
+                className="px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 transition-colors"
               >
                 Cancel
               </button>
