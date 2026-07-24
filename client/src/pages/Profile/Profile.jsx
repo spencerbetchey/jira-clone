@@ -23,7 +23,7 @@ function Profile() {
     setSaving(true)
     try {
       const res = await axios.put(
-        'http://localhost:5000/api/auth/me',
+        `${import.meta.env.VITE_API_URL}/auth/me`,
         { name, email },
         { headers: { Authorization: `Bearer ${token}` } }
       )

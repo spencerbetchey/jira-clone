@@ -12,7 +12,7 @@ export function AuthProvider({ children }) {
     const fetchUser = async () => {
       if (token) {
         try {
-          const res = await axios.get('http://localhost:5000/api/auth/me', {
+          const res = await axios.get(`${import.meta.env.VITE_API_URL}/auth/me`, {
             headers: { Authorization: `Bearer ${token}` }
           })
           setUser(res.data.user)
@@ -38,7 +38,6 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('token')
   }
 
-  //Update user info in context after a profile edit, no new token needed
   const updateUser = (userData) => {
     setUser(userData)
   }

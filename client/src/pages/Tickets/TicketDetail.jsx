@@ -116,8 +116,8 @@ function TicketDetail() {
 
       {/* Ticket Header */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
+        <div className="flex items-start justify-between flex-wrap gap-4">
+          <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-2">
               <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${getTypeColor(ticket.type)}`}>
                 {ticket.type}
@@ -131,7 +131,7 @@ function TicketDetail() {
             </div>
             <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{ticket.title}</h1>
             <p className="text-gray-500 dark:text-gray-400 mt-2">{ticket.description || 'No description'}</p>
-            <div className="flex gap-4 mt-3">
+            <div className="flex gap-4 mt-3 flex-wrap">
               <span className="text-xs text-gray-400 dark:text-gray-500">Reporter: {ticket.reporter_name}</span>
               <span className="text-xs text-gray-400 dark:text-gray-500">
                 Assignee: {ticket.assignee_name || 'Unassigned'}
@@ -142,7 +142,7 @@ function TicketDetail() {
             </div>
           </div>
           {(myRole === 'admin' || myRole === 'developer') && (
-            <div className="flex gap-2 ml-4">
+            <div className="flex gap-2">
               <button
                 onClick={handleEditOpen}
                 className="text-sm text-blue-500 hover:text-blue-700 border border-blue-200 dark:border-blue-800 px-3 py-1.5 rounded-md hover:bg-blue-50 dark:hover:bg-blue-950 transition-colors"

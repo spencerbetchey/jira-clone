@@ -247,7 +247,7 @@ function ProjectDetail() {
           </div>
 
           {/* Filters */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap">
             <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">Filter:</span>
 
             <select

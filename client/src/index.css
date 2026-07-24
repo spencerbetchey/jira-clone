@@ -1,3 +1,13 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@media (max-width: 767px) {
+  input, textarea, select {
+    font-size: 16px;
+  }
+}

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'http://localhost:5000/api/projects'
+const API_URL = `${import.meta.env.VITE_API_URL}/projects`
 
 const getAuthHeader = () => {
   const token = localStorage.getItem('token')
@@ -43,14 +43,14 @@ export const deleteTicket = async (projectId, ticketId) => {
 }
 
 export const fetchAllTickets = async () => {
-  const res = await axios.get('http://localhost:5000/api/tickets', {
+  const res = await axios.get(`${import.meta.env.VITE_API_URL}/tickets`, {
     headers: getAuthHeader()
   })
   return res.data.tickets
 }
 
 export const fetchTicketHistory = async (ticketId) => {
-  const res = await axios.get(`http://localhost:5000/api/tickets/${ticketId}/history`, {
+  const res = await axios.get(`${import.meta.env.VITE_API_URL}/tickets/${ticketId}/history`, {
     headers: getAuthHeader()
   })
   return res.data.history
