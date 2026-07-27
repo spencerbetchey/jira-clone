@@ -109,12 +109,39 @@ const updateTicket = async (req, res) => {
 
     const ticket = existing[0]
 
-    //Log status change in history if status changed
-    if (status && status !== ticket.status) {
+    //Log simple field changes (status, priority, type)
+    const simpleFields = { status, priority, type }
+    for (const field of Object.keys(simpleFields)) {
+      const newValue = simpleFields[field]
+      if (newValue && newValue !== ticket[field]) {
+        await pool.query(
+          `INSERT INTO ticket_history (ticket_id, user_id, field_changed, old_value, new_value)
+           VALUES (?, ?, ?, ?, ?)`,
+          [id, req.userId, field, ticket[field], newValue]
+        )
+      }
+    }
+
+    //Log assignee changes separately
+    //Need to resolve IDs to names for a readable history entry
+    const newAssigneeId = assignee_id !== undefined ? assignee_id : ticket.assignee_id
+    if (newAssigneeId != ticket.assignee_id) {
+      let oldName = null
+      let newName = null
+
+      if (ticket.assignee_id) {
+        const [oldUser] = await pool.query('SELECT name FROM users WHERE id = ?', [ticket.assignee_id])
+        oldName = oldUser[0]?.name || null
+      }
+      if (newAssigneeId) {
+        const [newUser] = await pool.query('SELECT name FROM users WHERE id = ?', [newAssigneeId])
+        newName = newUser[0]?.name || null
+      }
+
       await pool.query(
         `INSERT INTO ticket_history (ticket_id, user_id, field_changed, old_value, new_value)
          VALUES (?, ?, ?, ?, ?)`,
-        [id, req.userId, 'status', ticket.status, status]
+        [id, req.userId, 'assignee', oldName, newName]
       )
     }
 
@@ -128,7 +155,7 @@ const updateTicket = async (req, res) => {
         status || ticket.status,
         priority || ticket.priority,
         type || ticket.type,
-        assignee_id || ticket.assignee_id,
+        assignee_id !== undefined ? assignee_id : ticket.assignee_id,
         id
       ]
     )

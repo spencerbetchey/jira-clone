@@ -5,13 +5,14 @@ import KanbanBoard from '../../components/tickets/KanbanBoard'
 import { fetchSprints } from '../../api/sprints'
 import SprintPanel from '../../components/tickets/SprintPanel'
 import MembersPanel from '../../components/layout/MembersPanel'
-import { fetchProject, deleteProject, updateProject, fetchMyProjectRole } from '../../api/projects'
+import { fetchProject, deleteProject, updateProject, fetchMyProjectRole, fetchProjectMembers } from '../../api/projects'
 
 function ProjectDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
   const [project, setProject] = useState(null)
   const [tickets, setTickets] = useState([])
+  const [members, setMembers] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [showTicketModal, setShowTicketModal] = useState(false)
@@ -30,7 +31,8 @@ function ProjectDetail() {
     title: '',
     description: '',
     priority: 'medium',
-    type: 'task'
+    type: 'task',
+    assignee_id: ''
   })
   const [editProject, setEditProject] = useState({
     name: '',
@@ -43,16 +45,18 @@ function ProjectDetail() {
 
   const loadData = async () => {
   try {
-    const [projectData, ticketsData, sprintsData, roleData] = await Promise.all([
+    const [projectData, ticketsData, sprintsData, roleData, membersData] = await Promise.all([
       fetchProject(id),
       fetchTickets(id),
       fetchSprints(id),
-      fetchMyProjectRole(id)
+      fetchMyProjectRole(id),
+      fetchProjectMembers(id)
     ])
     setProject(projectData)
     setTickets(ticketsData)
     setSprints(sprintsData)
     setMyRole(roleData)
+    setMembers(membersData)
   } catch (err) {
     setError('Failed to load project')
   } finally {
@@ -93,9 +97,10 @@ function ProjectDetail() {
     if (!newTicket.title.trim()) return
     setCreating(true)
     try {
-      const created = await createTicket(id, newTicket)
+      const payload = { ...newTicket, assignee_id: newTicket.assignee_id || null }
+      const created = await createTicket(id, payload)
       setTickets([created, ...tickets])
-      setNewTicket({ title: '', description: '', priority: 'medium', type: 'task' })
+      setNewTicket({ title: '', description: '', priority: 'medium', type: 'task', assignee_id: '' })
       setShowTicketModal(false)
     } catch (err) {
       setError('Failed to create ticket')
@@ -434,6 +439,19 @@ function ProjectDetail() {
                     <option value="improvement">Improvement</option>
                   </select>
                 </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Assignee</label>
+                <select
+                  value={newTicket.assignee_id}
+                  onChange={(e) => setNewTicket({ ...newTicket, assignee_id: e.target.value })}
+                  className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Unassigned</option>
+                  {members.map(member => (
+                    <option key={member.id} value={member.id}>{member.name}</option>
+                  ))}
+                </select>
               </div>
             </div>
             <div className="flex gap-3 mt-6 justify-end">

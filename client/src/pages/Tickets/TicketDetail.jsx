@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { fetchTicket, deleteTicket, updateTicket } from '../../api/tickets'
-import { fetchMyProjectRole } from '../../api/projects'
+import { fetchMyProjectRole, fetchProjectMembers } from '../../api/projects'
 import { useAuth } from '../../context/AuthContext'
 import CommentSection from '../../components/tickets/CommentSection'
 import TicketHistory from '../../components/tickets/TicketHistory'
@@ -10,6 +10,7 @@ function TicketDetail() {
   const { projectId, ticketId } = useParams()
   const navigate = useNavigate()
   const [ticket, setTicket] = useState(null)
+  const [members, setMembers] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [showEditModal, setShowEditModal] = useState(false)
@@ -27,6 +28,8 @@ function TicketDetail() {
       setTicket(data)
       const role = await fetchMyProjectRole(projectId)
       setMyRole(role)
+      const membersData = await fetchProjectMembers(projectId)
+      setMembers(membersData)
     } catch (err) {
       setError('Failed to load ticket')
     } finally {
@@ -40,7 +43,8 @@ function TicketDetail() {
       description: ticket.description || '',
       status: ticket.status,
       priority: ticket.priority,
-      type: ticket.type
+      type: ticket.type,
+      assignee_id: ticket.assignee_id || ''
     })
     setShowEditModal(true)
   }
@@ -49,8 +53,10 @@ function TicketDetail() {
     if (!editTicket.title.trim()) return
     setSaving(true)
     try {
-      await updateTicket(projectId, ticketId, editTicket)
-      setTicket({ ...ticket, ...editTicket })
+      const payload = { ...editTicket, assignee_id: editTicket.assignee_id || null }
+      await updateTicket(projectId, ticketId, payload)
+      const assignedMember = members.find(m => m.id === Number(editTicket.assignee_id))
+      setTicket({ ...ticket, ...payload, assignee_name: assignedMember ? assignedMember.name : null })
       setShowEditModal(false)
     } catch (err) {
       setError('Failed to update ticket')
@@ -232,6 +238,19 @@ function TicketDetail() {
                   <option value="bug">Bug</option>
                   <option value="feature">Feature</option>
                   <option value="improvement">Improvement</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Assignee</label>
+                <select
+                  value={editTicket.assignee_id}
+                  onChange={(e) => setEditTicket({ ...editTicket, assignee_id: e.target.value })}
+                  className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Unassigned</option>
+                  {members.map(member => (
+                    <option key={member.id} value={member.id}>{member.name}</option>
+                  ))}
                 </select>
               </div>
             </div>
