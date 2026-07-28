@@ -5,6 +5,7 @@ import KanbanBoard from '../../components/tickets/KanbanBoard'
 import { fetchSprints } from '../../api/sprints'
 import SprintPanel from '../../components/tickets/SprintPanel'
 import MembersPanel from '../../components/layout/MembersPanel'
+import Avatar from '../../components/common/Avatar'
 import { fetchProject, deleteProject, updateProject, fetchMyProjectRole, fetchProjectMembers } from '../../api/projects'
 
 function ProjectDetail() {
@@ -327,6 +328,12 @@ function ProjectDetail() {
                   <span className="text-sm font-medium text-gray-800 dark:text-gray-100">{ticket.title}</span>
                 </div>
                 <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1.5">
+                    <Avatar name={ticket.assignee_name} size="sm" />
+                    <span className="text-xs text-gray-400 dark:text-gray-500">
+                      {ticket.assignee_name || 'Unassigned'}
+                    </span>
+                  </div>
                   <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${getPriorityColor(ticket.priority)}`}>
                     {ticket.priority}
                   </span>

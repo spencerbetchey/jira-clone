@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { fetchAllTickets } from '../../api/tickets'
+import Avatar from '../../components/common/Avatar'
 
 const PRIORITY_COLORS = {
   lowest: 'bg-gray-100 text-gray-600',
@@ -33,7 +34,8 @@ function Tickets() {
   const [filters, setFilters] = useState({
     priority: 'all',
     type: 'all',
-    status: 'all'
+    status: 'all',
+    assignee: 'all'
   })
 
   useEffect(() => {
@@ -51,12 +53,27 @@ function Tickets() {
     }
   }
 
+  //Build a unique, alphabetically sorted list of assignees from the tickets we already have
+  const getAssigneeOptions = () => {
+    const seen = new Map()
+    tickets.forEach(ticket => {
+      if (ticket.assignee_id && !seen.has(ticket.assignee_id)) {
+        seen.set(ticket.assignee_id, ticket.assignee_name)
+      }
+    })
+    return Array.from(seen.entries())
+      .map(([id, name]) => ({ id, name }))
+      .sort((a, b) => a.name.localeCompare(b.name))
+  }
+
   const getFilteredTickets = () => {
     return tickets.filter(ticket => {
       if (search && !ticket.title.toLowerCase().includes(search.toLowerCase())) return false
       if (filters.priority !== 'all' && ticket.priority !== filters.priority) return false
       if (filters.type !== 'all' && ticket.type !== filters.type) return false
       if (filters.status !== 'all' && ticket.status !== filters.status) return false
+      if (filters.assignee === 'unassigned' && ticket.assignee_id) return false
+      if (filters.assignee !== 'all' && filters.assignee !== 'unassigned' && ticket.assignee_id !== Number(filters.assignee)) return false
       return true
     })
   }
@@ -64,6 +81,7 @@ function Tickets() {
   if (loading) return <div className="text-gray-500">Loading tickets...</div>
 
   const filteredTickets = getFilteredTickets()
+  const assigneeOptions = getAssigneeOptions()
 
   return (
     <div>
@@ -126,9 +144,21 @@ function Tickets() {
             <option value="improvement">Improvement</option>
           </select>
 
-          {(search || filters.priority !== 'all' || filters.type !== 'all' || filters.status !== 'all') && (
+          <select
+            value={filters.assignee}
+            onChange={(e) => setFilters({ ...filters, assignee: e.target.value })}
+            className="border border-gray-200 dark:border-gray-700 dark:bg-gray-700 rounded-md px-2 py-1.5 text-sm text-gray-600 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="all">All Assignees</option>
+            {assigneeOptions.map(person => (
+              <option key={person.id} value={person.id}>{person.name}</option>
+            ))}
+            <option value="unassigned">Unassigned</option>
+          </select>
+
+          {(search || filters.priority !== 'all' || filters.type !== 'all' || filters.status !== 'all' || filters.assignee !== 'all') && (
             <button
-              onClick={() => { setSearch(''); setFilters({ priority: 'all', type: 'all', status: 'all' }) }}
+              onClick={() => { setSearch(''); setFilters({ priority: 'all', type: 'all', status: 'all', assignee: 'all' }) }}
               className="text-sm text-blue-600 hover:underline"
             >
               Clear all
@@ -152,12 +182,13 @@ function Tickets() {
           <div className="divide-y divide-gray-100 dark:divide-gray-700">
             {/* Table Header */}
             <div className="px-4 py-3 grid grid-cols-12 gap-4 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-              <div className="col-span-4">Title</div>
+              <div className="col-span-3">Title</div>
               <div className="col-span-2">Project</div>
               <div className="col-span-1">Type</div>
               <div className="col-span-1">Priority</div>
               <div className="col-span-2">Status</div>
-              <div className="col-span-2">Reporter</div>
+              <div className="col-span-2">Assignee</div>
+              <div className="col-span-1">Reporter</div>
             </div>
 
             {filteredTickets.map(ticket => (
@@ -166,7 +197,7 @@ function Tickets() {
                 to={`/projects/${ticket.project_id}/tickets/${ticket.id}`}
                 className="px-4 py-3 grid grid-cols-12 gap-4 items-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
-                <div className="col-span-4">
+                <div className="col-span-3">
                   <p className="text-sm font-medium text-gray-800 dark:text-gray-100 truncate">{ticket.title}</p>
                 </div>
                 <div className="col-span-2">
@@ -187,8 +218,14 @@ function Tickets() {
                     {ticket.status.replace('_', ' ')}
                   </span>
                 </div>
-                <div className="col-span-2">
-                  <p className="text-xs text-gray-500 dark:text-gray-400">{ticket.reporter_name}</p>
+                <div className="col-span-2 flex items-center gap-1.5 min-w-0">
+                  <Avatar name={ticket.assignee_name} size="sm" />
+                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                    {ticket.assignee_name || 'Unassigned'}
+                  </p>
+                </div>
+                <div className="col-span-1">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{ticket.reporter_name}</p>
                 </div>
               </Link>
             ))}
