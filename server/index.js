@@ -7,6 +7,7 @@ const projectRoutes = require('./routes/projectRoutes')
 const ticketRoutes = require('./routes/ticketRoutes')
 const sprintRoutes = require('./routes/sprintRoutes')
 const commentRoutes = require('./routes/commentRoutes')
+const notificationRoutes = require('./routes/notificationRoutes')
 
 dotenv.config()
 
@@ -24,6 +25,7 @@ app.use('/api/projects/:projectId/tickets', ticketRoutes)
 app.use('/api/projects/:projectId/sprints', sprintRoutes)
 app.use('/api/tickets/:ticketId/comments', commentRoutes)
 app.use('/api/tickets', require('./routes/globalTicketRoutes'))
+app.use('/api/notifications', notificationRoutes)
 
 //Test route
 app.get('/', (req, res) => {

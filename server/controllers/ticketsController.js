@@ -85,6 +85,15 @@ const createTicket = async (req, res) => {
       [result.insertId, req.userId, 'status', null, 'todo']
     )
 
+    //Notify the assignee, unless they assigned it to themselves
+    if (assignee_id && Number(assignee_id) !== req.userId) {
+      await pool.query(
+        `INSERT INTO notifications (user_id, message, link)
+         VALUES (?, ?, ?)`,
+        [assignee_id, `You were assigned to "${title}"`, `/projects/${projectId}/tickets/${result.insertId}`]
+      )
+    }
+
     res.status(201).json({ ticket: newTicket[0] })
   } catch (error) {
     console.error('CreateTicket error:', error)
@@ -110,6 +119,7 @@ const updateTicket = async (req, res) => {
     const ticket = existing[0]
 
     //Log simple field changes (status, priority, type)
+    //These are already readable
     const simpleFields = { status, priority, type }
     for (const field of Object.keys(simpleFields)) {
       const newValue = simpleFields[field]
@@ -122,7 +132,7 @@ const updateTicket = async (req, res) => {
       }
     }
 
-    //Log assignee changes separately
+    //Log assignee changes separatel
     //Need to resolve IDs to names for a readable history entry
     const newAssigneeId = assignee_id !== undefined ? assignee_id : ticket.assignee_id
     if (newAssigneeId != ticket.assignee_id) {
@@ -143,6 +153,15 @@ const updateTicket = async (req, res) => {
          VALUES (?, ?, ?, ?, ?)`,
         [id, req.userId, 'assignee', oldName, newName]
       )
+
+      //Notify the newly assigned person, unless they assigned it to themselves
+      if (newAssigneeId && Number(newAssigneeId) !== req.userId) {
+        await pool.query(
+          `INSERT INTO notifications (user_id, message, link)
+           VALUES (?, ?, ?)`,
+          [newAssigneeId, `You were assigned to "${ticket.title}"`, `/projects/${ticket.project_id}/tickets/${id}`]
+        )
+      }
     }
 
     await pool.query(

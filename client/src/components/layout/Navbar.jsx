@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useTheme } from '../../context/ThemeContext'
+import NotificationBell from './NotificationBell'
 
 function Navbar() {
   const { user, logout } = useAuth()
@@ -32,6 +33,7 @@ function Navbar() {
 
         {/* Desktop right side */}
         <div className="hidden md:flex items-center gap-4">
+          <NotificationBell />
           <button
             onClick={toggleDarkMode}
             className="text-white hover:text-blue-200 transition-colors text-lg"
@@ -52,8 +54,9 @@ function Navbar() {
           </button>
         </div>
 
-        {/* Mobile: dark mode toggle + hamburger */}
+        {/* Mobile: notifications + dark mode toggle + hamburger */}
         <div className="flex md:hidden items-center gap-3">
+          <NotificationBell />
           <button
             onClick={toggleDarkMode}
             className="text-white text-lg"
