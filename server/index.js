@@ -39,3 +39,5 @@ app.listen(PORT, () => {
     .then(() => console.log('MySQL connected successfully!'))
     .catch((err) => console.error('MySQL connection failed:', err.message))
 })
+
+//July 30th: Deployed backend server to Render
