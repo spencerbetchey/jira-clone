@@ -41,3 +41,4 @@ app.listen(PORT, () => {
 })
 
 //July 30th: Deployed backend server to Render
+//August 16th: Connected deployed backend to production Aiven database
