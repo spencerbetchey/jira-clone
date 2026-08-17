@@ -78,10 +78,10 @@ A full stack, Jira inspired project management and ticket tracking application. 
 ## Architecture
 
 ```
-┌─────────────┐        HTTPS         ┌──────────────┐        SSL/TLS       ┌──────────────┐
-│   Vercel     │  ─────────────────▶  │    Render     │  ──────────────────▶ │    Aiven     │
-│  (React app) │                       │ (Express API) │                       │   (MySQL)    │
-└─────────────┘                       └──────────────┘                       └──────────────┘
+┌──────────────┐        HTTPS          ┌──────────────┐        SSL/TLS           ┌──────────────┐
+│   Vercel     │  ─────────────────▶ │    Render     │  ──────────────────▶ │    Aiven     │
+│  (React app) │                      │ (Express API) │                      │   (MySQL)    │
+└──────────────┘                       └──────────────┘                       └──────────────┘
 ```
 
 The frontend and backend are deployed independently, communicating entirely over HTTPS. The backend connects to a fully managed, SSL required MySQL instance that is completely separate from my local development database I used for dev/testing.
@@ -160,7 +160,7 @@ jira-clone/
 │   ├── middleware/        # Auth and role enforcement
 │   ├── routes/
 │   └── scripts/           # One off setup scripts
-└── schema.sql              # Database schema
+└── schema.sql             # Database schema
 ```
 
 ---
