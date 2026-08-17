@@ -43,3 +43,4 @@ app.listen(PORT, () => {
 //July 30th: Deployed backend server to Render
 //August 16th: Connected deployed backend to production Aiven database
 //August 16th: Deployed site frontend through Vercel, connected to deployed backend server and database. Site is now fully functional and deployed.
+//August 17th: Completed end to end testing pass on live production deployment
