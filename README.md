@@ -6,7 +6,8 @@ A full stack, Jira inspired project management and ticket tracking application. 
 
 > **Important Note:** this project is hosted on free tier website infrastructure. The backend (Render) spins down after 15 minutes of inactivity and may take 30–60 seconds to "wake up". The production database (hosted through Aiven) may also go down after extended inactivity, and may cause the site to not function if I haven't manually restarted the service recently. If the live demo seems unresponsive on first visit, please wait a minute and try again, or refer to the screenshots/video of site demo.
 
-<!-- SCREENSHOT: Add a hero screenshot of the Dashboard or Kanban board here -->
+<!-- Add a screenshot of the dashboard -->
+![Dashboard](screenshots/dashboard.png)
 
 ---
 
@@ -48,8 +49,43 @@ A full stack, Jira inspired project management and ticket tracking application. 
 - Dark mode with persistent user preference
 - Deployed with a real production database (again, unfortunately it is the free tier so it may stop running after a period of inactivity, requiring a manaual restart from me)
 
-<!-- SCREENSHOT: Add a Kanban board screenshot here -->
-<!-- SCREENSHOT: Add a dark mode screenshot here -->
+<!-- Add a project screenshot -->
+![Dashboard](screenshots/project.png)
+
+<!-- Add a Kanban board screenshot -->
+![KanbanBoard](screenshots/kanbanboard.png)
+
+## More Screenshots
+
+### Projects Overview
+View and access all projects the user is a member of.
+
+![Projects overview](screenshots/projects.png)
+
+### Ticket List
+Browse, search, and filter tickets across projects in a structured list view.
+
+![Ticket list](screenshots/tickets.png)
+
+### Ticket Details
+View ticket information, update fields, assign users, and participate in threaded discussions.
+
+![Ticket details](screenshots/ticket.png)
+
+### Create a New Ticket
+Create a ticket with its project, title, description, type, priority, status, and assignee.
+
+![Create a new ticket](screenshots/createnewticket.png)
+
+### Light Mode Dashboard
+The dashboard displayed using the persistent light mode theme.
+
+![Dashboard in light mode](screenshots/dashboardlightmode.png)
+
+### Responsive Mobile View
+ProjectFlow’s navigation and interface adapted for smaller mobile screens.
+
+![ProjectFlow mobile view](screenshots/mobileview.png)
 
 ---
 
