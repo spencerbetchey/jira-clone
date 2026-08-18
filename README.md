@@ -49,41 +49,46 @@ A full stack, Jira inspired project management and ticket tracking application. 
 - Dark mode with persistent user preference
 - Deployed with a real production database (again, unfortunately it is the free tier so it may stop running after a period of inactivity, requiring a manaual restart from me)
 
-<!-- Add a project screenshot -->
-![Dashboard](screenshots/project.png)
 
-<!-- Add a Kanban board screenshot -->
+## Screenshots
+
+### Project View
+Detailed view of a project:
+
+![Project](screenshots/project.png)
+
+### Kanban Board
+Keeps track of a projects' tickets:
+
 ![KanbanBoard](screenshots/kanbanboard.png)
 
-## More Screenshots
-
 ### Projects Overview
-View and access all projects the user is a member of.
+View and access all projects the user is a member of:
 
 ![Projects overview](screenshots/projects.png)
 
 ### Ticket List
-Browse, search, and filter tickets across projects in a structured list view.
+Browse, search, and filter tickets across projects in a structured list view:
 
 ![Ticket list](screenshots/tickets.png)
 
 ### Ticket Details
-View ticket information, update fields, assign users, and participate in threaded discussions.
+View ticket information, update fields, assign users, and leave comments:
 
 ![Ticket details](screenshots/ticket.png)
 
 ### Create a New Ticket
-Create a ticket with its project, title, description, type, priority, status, and assignee.
+Create a ticket with its project, title, description, type, priority, status, and assignee:
 
 ![Create a new ticket](screenshots/createnewticket.png)
 
 ### Light Mode Dashboard
-The dashboard displayed using the persistent light mode theme.
+The dashboard displayed using the light mode theme (instead of dark view shown in other screenshots):
 
 ![Dashboard in light mode](screenshots/dashboardlightmode.png)
 
 ### Responsive Mobile View
-ProjectFlow’s navigation and interface adapted for smaller mobile screens.
+ProjectFlow’s navigation and interface adapted for smaller mobile screens:
 
 ![ProjectFlow mobile view](screenshots/mobileview.png)
 
