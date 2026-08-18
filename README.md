@@ -6,7 +6,7 @@ A full stack, Jira inspired project management and ticket tracking application. 
 
 > **Important Note:** this project is hosted on free tier website infrastructure. The backend (Render) spins down after 15 minutes of inactivity and may take 30–60 seconds to "wake up". The production database (hosted through Aiven) may also go down after extended inactivity, and may cause the site to not function if I haven't manually restarted the service recently. If the live demo seems unresponsive on first visit, please wait a minute and try again, or refer to the screenshots/video of site demo.
 
-<!-- Add a screenshot of the dashboard -->
+**Site Landing Page (Dashboard):**
 ![Dashboard](screenshots/dashboard.png)
 
 ---
@@ -49,16 +49,17 @@ A full stack, Jira inspired project management and ticket tracking application. 
 - Dark mode with persistent user preference
 - Deployed with a real production database (again, unfortunately it is the free tier so it may stop running after a period of inactivity, requiring a manaual restart from me)
 
+---
 
 ## Screenshots
 
 ### Project View
-Detailed view of a project:
+View project details, members, sprints, tickets, etc:
 
 ![Project](screenshots/project.png)
 
 ### Kanban Board
-Keeps track of a projects' tickets:
+Keeps track of a projects' tickets in an organized kanban arrangement:
 
 ![KanbanBoard](screenshots/kanbanboard.png)
 
