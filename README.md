@@ -6,7 +6,8 @@ A full stack, Jira inspired project management and ticket tracking application. 
 
 > **Important Note:** this project is hosted on free tier website infrastructure. The backend (Render) spins down after 15 minutes of inactivity and may take 30–60 seconds to "wake up". The production database (hosted through Aiven) may also go down after extended inactivity, and may cause the site to not function if I haven't manually restarted the service recently. If the live demo seems unresponsive on first visit, please wait a minute and try again, or refer to the screenshots/video of site demo.
 
-**Site Landing Page (Dashboard):**
+**Dashboard:**
+
 ![Dashboard](screenshots/dashboard.png)
 
 ---
