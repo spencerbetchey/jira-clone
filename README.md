@@ -12,6 +12,14 @@ A full stack, Jira inspired project management and ticket tracking application. 
 
 ---
 
+## Demo
+
+[![Watch the demo](https://img.youtube.com/vi/NwF-piiDFmU/maxresdefault.jpg)](https://youtu.be/NwF-piiDFmU)
+
+A ~5 minute walkthrough of ProjectFlow (no audio/commentary).
+
+---
+
 ## Features
 
 **Authentication & Users**
@@ -90,7 +98,7 @@ The dashboard displayed using the light mode theme (instead of dark view shown i
 ![Dashboard in light mode](screenshots/dashboardlightmode.png)
 
 ### Responsive Mobile View
-ProjectFlow’s navigation and interface adapted for smaller mobile screens:
+ProjectFlow's navigation and interface adapted for smaller mobile screens:
 
 ![ProjectFlow mobile view](screenshots/mobileview.png)
 
@@ -217,4 +225,4 @@ jira-clone/
 
 ## About This Project
 
-This was built by me (https://github.com/spencerbetchey) with help from Claude AI, over my summer break between Junior and Senior year of college, mostly as a way to actually learn full stack development by building something professional and functional. React, Node/Express, MySQL, and deployment were all pretty new to me going in, and I wanted a larger scale project that I could take day by day and use as a chance to learn some new technologies that I was interested in. One of my goals for this project was to push myself far out of my comfort zone and build something bigger than I ever had by myself, so even though using Claude as a learning, planning, and debugging tool was very useful, making the product decisions, writing/testing everything, and understanding how all the pieces come together was more important and valuable than anything. I'm not going to pretend I could've done the whole thing solo from day 1, but this was a genuine learning project first, and I grew as a developer so much because of it. 
+This was built by me (https://github.com/spencerbetchey) with help from Claude AI, over my summer break between Junior and Senior year of college, mostly as a way to actually learn full stack development by building something professional and functional. React, Node/Express, MySQL, and deployment were all pretty new to me going in, and I wanted a larger scale project that I could take day by day and use as a chance to learn some new technologies that I was interested in. One of my goals for this project was to push myself far out of my comfort zone and build something bigger than I ever had by myself, so even though using Claude as a learning, planning, and debugging tool was very useful, making the product decisions, writing/testing everything, and understanding how all the pieces come together was more important and valuable than anything. I'm not going to pretend I could've done the whole thing solo from day 1, but this was a genuine learning project first, and I grew as a developer so much because of it.
