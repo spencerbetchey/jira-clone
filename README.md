@@ -16,7 +16,7 @@ A full stack, Jira inspired project management and ticket tracking application. 
 
 [![Watch the demo](https://img.youtube.com/vi/NwF-piiDFmU/hqdefault.jpg)](https://youtu.be/NwF-piiDFmU)
 
-A ~5 minute walkthrough of ProjectFlow (no audio/commentary).
+^^Click the thumbnail above for a ~5 minute walkthrough of ProjectFlow (no audio/commentary) ^^ 
 
 ---
 
